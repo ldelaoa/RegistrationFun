@@ -47,23 +47,23 @@ def main(nifti_root,clinicInfo_path,pxID):
 
 		#Cropping by method
 		ldct_cropped_1,pet_cropped_1=cropCTfromROI_lung(ldct_np,ldct_LM_np,pet_np,pet_bool=True)
-		plan_ct_cropped_2,pet_cropped_2 = cropCTfromROI_ClinicalInfo(ldct_np,ldct_LM_np,itv,clinicInfo_path,pxID,pet_np)
-		plan_ct_cropped_3,pet_cropped_3 = cropCTfromROI_BinaryPET(ldct_cropped_1,pet_cropped_1)
+		ldct_cropped_2,pet_cropped_2 = cropCTfromROI_ClinicalInfo(ldct_np,ldct_LM_np,itv,clinicInfo_path,pxID,pet_np)
+		ldct_cropped_3,pet_cropped_3 = cropCTfromROI_BinaryPET(ldct_cropped_1,pet_cropped_1)
 
 		# Crop Plan CT
 		planCt_cropped_1, _ = cropCTfromROI_lung(planCt_np, planCt_LM_np, None, pet_bool=False)
-		itv_cropped_1, _ = cropCTfromROI_lung(itv_np, planCt_LM_np, None, pet_bool=False)
-		planCt_LM_cropped_1 = cropCTfromROI_lung(planCt_LM_np, planCt_LM_np, None, pet_bool=False)
+		itv_cropped_1,_ = cropCTfromROI_lung(itv_np, planCt_LM_np, None, pet_bool=False)
+		planCt_LM_cropped_1,_ = cropCTfromROI_lung(planCt_LM_np, planCt_LM_np, None, pet_bool=False)
 
-		np.savez(nifti_root+'MovingArrays.npz', array1=ldct_cropped_1, array2=plan_ct_cropped_2,array3=plan_ct_cropped_3)
+		np.savez(nifti_root+'MovingArrays.npz', array1=ldct_cropped_1, array2=ldct_cropped_2,array3=ldct_cropped_3)
 		np.savez(nifti_root+'TargetArrays.npz',array1=planCt_cropped_1,array2=planCt_LM_cropped_1,array3=itv_cropped_1)
-		exit(0)
+		return 0
 
 
 		#Register
 		registCT1,registPET1 = Register_fun(planCt_cropped_1,ldct_cropped_1,pet_cropped_1,pxID)
-		registCT2,registPET2 = Register_fun(planCt_cropped_1,plan_ct_cropped_2,pet_cropped_2,pxID)
-		registCT3,registPET3 = Register_fun(planCt_cropped_1,plan_ct_cropped_3,pet_cropped_3,pxID)
+		registCT2,registPET2 = Register_fun(planCt_cropped_1,ldct_cropped_2,pet_cropped_2,pxID)
+		registCT3,registPET3 = Register_fun(planCt_cropped_1,ldct_cropped_3,pet_cropped_3,pxID)
 
 		registCT1_norm = registCT1/np.max(registCT1)
 		registPET1_norm = (registPET1/np.max(registPET1))*5
@@ -99,6 +99,11 @@ if __name__ == "__main__":
 	count_incomplete = []
 	total_px = 0
 	for patientID in id_column:
-		main(nifti_root,clinicInfo_path,patientID)
-		break
+		print(patientID)
+		if patientID != 32628:
+			main(nifti_root,clinicInfo_path,patientID)
+
+		total_px +=1
+		if total_px==4:
+			break
 	

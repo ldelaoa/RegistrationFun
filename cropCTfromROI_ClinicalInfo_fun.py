@@ -59,7 +59,7 @@ def cropCTfromROI_ClinicalInfo(plan_ct,plan_ct_LM,itv,clinicInfo_path,patientID,
         #Display
         itv_nii=None
         corrupt_index = None
-        display_ClinicCrops(plan_ct,sum_coords,itv_nii,plan_ct_LM,corrupt_index)
+        #display_ClinicCrops(plan_ct,sum_coords,itv_nii,plan_ct_LM,corrupt_index)
 
     
     return plan_ct_nii_cropped,pet_nii_cropped

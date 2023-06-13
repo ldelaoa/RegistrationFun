@@ -65,19 +65,16 @@ def ReadAndResample(ldct_path,ldct_LM_path,pet_path,planCT_path,planCT_LM_path,i
         ldct_LM_np = ldct_LM_np[:, ::-1, :]
     else:
         ldct_LM_nii = nib.load(ldct_LM_path[0])
-        ldct_LM_nii_np = ldct_LM_nii.get_fdata()
-        ldct_LM_nii_np = np.transpose(ldct_LM_nii_np, (2, 1,0))
-        ldct_LM_nii_2 = nib.Nifti1Image(ldct_LM_nii_np,ldct_LM_nii.affine)
+        ldct_LM_nii_np = np.transpose(ldct_LM_nii.get_fdata(), (2, 1, 0))
+        ldct_LM_nii_2 = nib.Nifti1Image(ldct_LM_nii_np, ldct_LM_nii.affine)
         ldct_LM_reshaped = resample_to_output(ldct_LM_nii_2, voxel_sizes=target_voxel_sizes)
-        ldct_LM_np = ldct_LM_reshaped.get_fdata()
-        ldct_LM_np = np.transpose(ldct_LM_np, (2, 1,0))
-        ldct_LM_np = np.round(ldct_LM_np,decimals=0)
-        ldct_LM_np = np.where(ldct_LM_np <= 0, 0, np.where(ldct_LM_np >= 2, 2, ldct_LM_np))
-        ldct_LM_np = ldct_LM_np[::-1, :, :]
-        ldct_LM_np = ldct_LM_np[:, :, ::-1]
+        ldct_LM_reshaped_np = np.round(ldct_LM_reshaped.get_fdata(), decimals=0)
+        np.clip(ldct_LM_reshaped_np, 0, 2, out=ldct_LM_reshaped_np)
+        ldct_LM_reshaped_np = np.flip(ldct_LM_reshaped_np, (0, 2))
         header = ldct_LM_reshaped.header
         cropped_filename = ldct_LM_path[0][:-7] + "_cropped.nii.gz"
-        save_nifti_with_header(ldct_LM_np, header, cropped_filename)
+        save_nifti_with_header(ldct_LM_reshaped_np, header, cropped_filename)
+
     
     #Read PET
     cropped_filename = pet_path[0][:-7] + "_cropped.nii.gz"
@@ -86,12 +83,11 @@ def ReadAndResample(ldct_path,ldct_LM_path,pet_path,planCT_path,planCT_LM_path,i
         pet_nii = nib.load(cropped_filename)
         pet_np = pet_nii.get_fdata()
     else:
-        pet_nii =nib.load(pet_path[0])
+        pet_nii = nib.load(pet_path[0])
         pet_reshaped = resample_to_output(pet_nii, voxel_sizes=target_voxel_sizes)
-        pet_np = pet_reshaped.get_fdata()
-        pet_np = np.transpose(pet_np, (2,1,0))
-        pet_np = np.round(pet_np,decimals=0)
-        pet_np = pet_np[:, :, ::-1]
+        pet_np = np.transpose(pet_reshaped.get_fdata(), (2, 1, 0))
+        pet_np = np.round(pet_np, decimals=0)
+        pet_np = np.flip(pet_np, axis=2)
         header = pet_reshaped.header
         cropped_filename = pet_path[0][:-7] + "_cropped.nii.gz"
         save_nifti_with_header(pet_np, header, cropped_filename)
