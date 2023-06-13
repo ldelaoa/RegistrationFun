@@ -1,3 +1,7 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+
 def display_ClinicCrops(plan_ct_nii,graph_coords,tumor,plan_ct_LM_nii,corrupt_index=None):
     #axial
     count=0

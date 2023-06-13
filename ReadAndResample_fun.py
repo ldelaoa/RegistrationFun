@@ -13,9 +13,9 @@ def ReadAndResample(ldct_path,ldct_LM_path,pet_path,planCT_path,planCT_LM_path,i
     #target_voxel_sizes = (1,1,2)
 
     #Read Plan CT
-    planct_nii = nib.load(planCT_path[0])
+    #planct_nii = nib.load(planCT_path[0])
     planct_reshaped= nib.load(planCT_path[0])
-    target_voxel_sizes = planct_nii.header.get_zooms()
+    target_voxel_sizes = planct_reshaped.header.get_zooms()
     #planct_reshaped = resample_to_output(planct_nii, voxel_sizes=target_voxel_sizes)
     planct_np = planct_reshaped.get_fdata()
     planct_np = np.transpose(planct_np, (2, 1,0))
@@ -42,6 +42,7 @@ def ReadAndResample(ldct_path,ldct_LM_path,pet_path,planCT_path,planCT_LM_path,i
     #Read LowDose CT
     cropped_filename = ldct_path[0][:-7] + "_cropped.nii.gz"
     if os.path.exists(cropped_filename):
+        print("Found cropped LDCT")
         ldct_nii = nib.load(cropped_filename)
         ldct_np = ldct_nii.get_fdata()
     else:
@@ -58,8 +59,10 @@ def ReadAndResample(ldct_path,ldct_LM_path,pet_path,planCT_path,planCT_LM_path,i
     #Read LowDose CT Lung Mask
     cropped_filename = ldct_LM_path[0][:-7] + "_cropped.nii.gz"
     if os.path.exists(cropped_filename):
+        print("Found cropped LDCT Mask")
         ldct_LM_nii = nib.load(cropped_filename)
         ldct_LM_np = ldct_LM_nii.get_fdata()
+        ldct_LM_np = ldct_LM_np[:, ::-1, :]
     else:
         ldct_LM_nii = nib.load(ldct_LM_path[0])
         ldct_LM_nii_np = ldct_LM_nii.get_fdata()
@@ -79,6 +82,7 @@ def ReadAndResample(ldct_path,ldct_LM_path,pet_path,planCT_path,planCT_LM_path,i
     #Read PET
     cropped_filename = pet_path[0][:-7] + "_cropped.nii.gz"
     if os.path.exists(cropped_filename):
+        print("Found cropped PET")
         pet_nii = nib.load(cropped_filename)
         pet_np = pet_nii.get_fdata()
     else:

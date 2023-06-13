@@ -9,7 +9,7 @@
 #from pydicom.tag import Tag
 #import sys
 #import matplotlib.pyplot as plt
-#from lungmask import mask as lungmask_fun
+
 #import nibabel as nib
 #from skimage.filters import threshold_multiotsu
 #from nibabel.processing import resample_to_output
@@ -43,17 +43,22 @@ def main(nifti_root,clinicInfo_path,pxID):
 	if len(ldct)!=0 and len(ldct_LM)!=0 and len(pet)!=0:
 		#From Path to NP - For now only LDCT, LDCT_LM and PET
 		ldct_np,ldct_LM_np,pet_np,planCt_np,planCt_LM_np,itv_np = ReadAndResample(ldct,ldct_LM,pet,planCt,planCt_LM,itv)
-		display_LoadImgs(ldct_np,ldct_LM_np,pet_np,planCt_np,planCt_LM_np,itv_np)
+		#display_LoadImgs(ldct_np,ldct_LM_np,pet_np,planCt_np,planCt_LM_np,itv_np)
 
 		#Cropping by method
 		ldct_cropped_1,pet_cropped_1=cropCTfromROI_lung(ldct_np,ldct_LM_np,pet_np,pet_bool=True)
 		plan_ct_cropped_2,pet_cropped_2 = cropCTfromROI_ClinicalInfo(ldct_np,ldct_LM_np,itv,clinicInfo_path,pxID,pet_np)
 		plan_ct_cropped_3,pet_cropped_3 = cropCTfromROI_BinaryPET(ldct_cropped_1,pet_cropped_1)
 
-		#Crop Plan CT
-		planCt_cropped_1,_=cropCTfromROI_lung(planCt_np,planCt_LM_np,None,pet_bool=False)
-		itv_cropped_1,_=cropCTfromROI_lung(itv_np,planCt_LM_np,None,pet_bool=False)
-		planCt_LM_cropped_1 = cropCTfromROI_lung(planCt_LM_np,planCt_LM_np,None,pet_bool=False)
+		# Crop Plan CT
+		planCt_cropped_1, _ = cropCTfromROI_lung(planCt_np, planCt_LM_np, None, pet_bool=False)
+		itv_cropped_1, _ = cropCTfromROI_lung(itv_np, planCt_LM_np, None, pet_bool=False)
+		planCt_LM_cropped_1 = cropCTfromROI_lung(planCt_LM_np, planCt_LM_np, None, pet_bool=False)
+
+		np.savez(nifti_root+'MovingArrays.npz', array1=ldct_cropped_1, array2=plan_ct_cropped_2,array3=plan_ct_cropped_3)
+		np.savez(nifti_root+'TargetArrays.npz',array1=planCt_cropped_1,array2=planCt_LM_cropped_1,array3=itv_cropped_1)
+		exit(0)
+
 
 		#Register
 		registCT1,registPET1 = Register_fun(planCt_cropped_1,ldct_cropped_1,pet_cropped_1,pxID)

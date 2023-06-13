@@ -1,8 +1,11 @@
+import numpy as np
+
+
 def CropBinary(binary_image,Middle_bool=False,coords_extra=None,extra=5):
 
-    slices = np.any(binary_image, axis=(0, 1))
-    rows = np.any(binary_image, axis=(0, 2))
-    cols = np.any(binary_image, axis=(1, 2))
+    slices = np.any(binary_image, axis=(1, 2))
+    rows = np.any(binary_image, axis=(0, 1))
+    cols = np.any(binary_image, axis=(0, 2))
     
     min_slice, max_slice = np.where(slices)[0][[0, -1]]
     min_row, max_row = np.where(rows)[0][[0, -1]]

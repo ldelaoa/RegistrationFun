@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def displayRegist(PETCT1,PETCT2,PETCT3,ITV,planCT,planCT_LungMask):
@@ -17,7 +18,7 @@ def displayRegist(PETCT1,PETCT2,PETCT3,ITV,planCT,planCT_LungMask):
             plt.tight_layout()
             plt.show()
             count+=1
-        if count>5:
+        if count>50:
             print("break")
             break
     return 0

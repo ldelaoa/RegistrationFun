@@ -1,3 +1,8 @@
+from lungmask import mask as lungmask_fun
+import nibabel as nib
+import SimpleITK as sitk
+
+
 def CreateLungMasks(CT_fpaths,save_root):
     # Get Lung mask and save it
     CT_path0 = CT_fpaths[0]

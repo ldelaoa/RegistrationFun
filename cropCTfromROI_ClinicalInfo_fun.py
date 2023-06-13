@@ -23,11 +23,11 @@ def cropCTfromROI_ClinicalInfo(plan_ct,plan_ct_LM,itv,clinicInfo_path,patientID,
     print("UpperCiirds",upper_coords)
     #Fix Coords
     sum_coords = upper_coords
-    #sum_coords[:3] = [x + y for x, y in zip(upper_coords[:3], side_coords[:3])]
-    #sum_coords[3:] = [x + y for x, y in zip(upper_coords[3:], side_coords[:3])]
-    #sum_coords = [sum_coords[2],sum_coords[1],sum_coords[0],sum_coords[5],sum_coords[4],sum_coords[3]]
+    sum_coords[:3] = [x + y for x, y in zip(upper_coords[:3], side_coords[:3])]
+    sum_coords[3:] = [x + y for x, y in zip(upper_coords[3:], side_coords[:3])]
+    sum_coords = [sum_coords[2],sum_coords[1],sum_coords[0],sum_coords[5],sum_coords[4],sum_coords[3]]
     
-    if True:
+    if False:
         plan_ct_nii_cropped = plan_ct[sum_coords[2]:sum_coords[5],sum_coords[1]:sum_coords[4],sum_coords[0]:sum_coords[3]]
         plan_ct_LM_nii_cropped = plan_ct_LM[sum_coords[2]:sum_coords[5],sum_coords[1]:sum_coords[4],sum_coords[0]:sum_coords[3]]
         pet_nii_cropped = pet[sum_coords[2]:sum_coords[5],sum_coords[1]:sum_coords[4],sum_coords[0]:sum_coords[3]]

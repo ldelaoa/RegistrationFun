@@ -15,8 +15,6 @@ def Side_Crop(plan_ct_LM_nii,key):
         rightLung = np.copy(plan_ct_LM_nii)
         print(np.unique(rightLung.flatten()))
         rightLung[rightLung>1.5] = 0
-        plt.imshow(rightLung[150,:,:])
-        plt.show()
         cropped,coords = CropBinary(rightLung)
     elif key =="Both" or key =="Unknown":
         bothLung = np.copy(plan_ct_LM_nii)
