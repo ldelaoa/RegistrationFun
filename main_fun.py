@@ -95,4 +95,5 @@ if __name__ == "__main__":
 	total_px = 0
 	for patientID in id_column:
 		main(nifti_root,clinicInfo_path,patientID)
+		break
 	
