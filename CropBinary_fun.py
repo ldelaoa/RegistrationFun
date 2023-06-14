@@ -1,7 +1,40 @@
 import numpy as np
 
+from monai.utils import first, set_determinism
+from monai.transforms import (
+    Compose,
+    EnsureType,
+    CropForegroundd,
+    AsDiscreted,
+    ToTensord,
+)
+from monai.data import DataLoader, Dataset
 
-def CropBinary(binary_image,Middle_bool=False,coords_extra=None,extra=5):
+
+def CropBinary_monai(image,mask):
+    pictionary=[
+        {"image": image_name,"mask":mask_name}
+        for image_name, mask_name in zip(image,mask)
+    ]
+
+    crop_transforms = Compose([
+        EnsureType(),
+        #AsDiscreted(keys=["mask"],to_onehot=None,treshold=0.5),
+        #CropForegroundd(keys=["image","mask"],source_key="mask",margin=0,k_divisible=32),
+        #ToTensord(keys=["image","mask"]),
+        ])
+
+    check_ds = Dataset(data=pictionary[:], transform=crop_transforms)
+    check_loader = DataLoader(check_ds, batch_size=1, num_workers=0)
+    batch_data = first(check_loader)
+    cropped_image, cropped_mask = (batch_data["image"], batch_data["mask"])
+
+    print("Cropped Shapes ",cropped_image.shape,cropped_mask.shape)
+
+    return cropped_image,cropped_mask
+
+
+def CropBinary_DEPRECATED(binary_image,Middle_bool=False,coords_extra=None,extra=5):
 
     slices = np.any(binary_image, axis=(1, 2))
     rows = np.any(binary_image, axis=(0, 1))
