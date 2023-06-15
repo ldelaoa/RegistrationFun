@@ -12,30 +12,16 @@ from monai.data import DataLoader, Dataset
 
 #import os.path
 #from nibabel.processing import resample_to_output
-#import nibabel as nib
+import nibabel as nib
 #import numpy as np
 
 
-def save_nifti_with_header(data, header, filename):
-    img = nib.Nifti1Image(data, None, header=header)
+def save_nifti_without_header(data, filename):
+    img = nib.Nifti1Image(data, affine=np.eye(4))
     nib.save(img, filename)
 
 
 def ReadAndOrient_monai(dictionary):
-
-    #To lung Mask Specs HU [-1,024; 600] and normalised to the 0–1 range
-    from_minmin_CT = -1024
-    from_maxmax_CT = 3071
-
-    to_minmin_CT = -1024
-    to_maxmax_CT = 800
-
-    #Need to work on this values
-    minmin_PET = -1024
-    maxmax_PET = 200
-
-    # Create Compose functions for preprocessing of train and validation
-    set_determinism(seed=0)
     image_keys = ["PlanCT", "ITV", "LDCT","PET"]
 
     load_transforms = Compose(

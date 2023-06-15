@@ -12,7 +12,7 @@ def CreateLungMasks(image_tensor,save_path,save_bool):
     print("ImageNP shape: ",image_np.shape)
     print('Creating Lung Mask: ')
     lung_path = save_path + '_LungMask.nii.gz'
-    if False:#os.path.exists(lung_path):
+    if os.path.exists(lung_path):
         print("LM already existing")
         lungmask_nii = nib.load(lung_path)
         lungmask_np = lungmask_nii.get_fdata()

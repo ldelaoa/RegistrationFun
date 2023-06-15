@@ -1,5 +1,4 @@
 import numpy as np
-
 from monai.utils import first, set_determinism
 from monai.transforms import (
     Compose,

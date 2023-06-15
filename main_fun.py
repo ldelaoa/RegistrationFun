@@ -25,6 +25,7 @@ from cropCTfromROI_ClinicalInfo_fun import *
 from cropCTfromROI_BinaryPET_fun import *
 from Register_fun import *
 from displayRegist_fun import *
+from Resample_fun import *
 import matplotlib.pyplot as plt
 
 import torch
@@ -42,24 +43,24 @@ def main(nifti_root,clinicInfo_path,pxID):
 		#From Path to NP - For now only LDCT, LDCT_LM and PET
 		PlanCT_tensor, LDCT_tensor = ReadAndOrient_monai(data_dicts)
 
-		LDCT_LM = CreateLungMasks(LDCT_tensor, save_root+"LDCT",True)
-		#display_LoadImgs(LDCT_tensor.numpy(), LDCT_LM)
-		LDCT_cropped, LDCT_LM_cropped = CropBinary_monai(LDCT_tensor, torch.from_numpy(LDCT_LM))
-		display_LoadImgs(LDCT_cropped[0].numpy(), LDCT_LM_cropped[0].numpy())
-
 		PlanCT_LM = CreateLungMasks(PlanCT_tensor, save_root + "PlanCT", True)
-		# display_LoadImgs(PlanCT_tensor.numpy(), PlanCT_LM)
 		PlanCT_cropped, PlanCT_LM_cropped = CropBinary_monai(PlanCT_tensor, torch.from_numpy(PlanCT_LM))
-		print(PlanCT_cropped.shape, PlanCT_LM_cropped.shape)
-		display_LoadImgs(PlanCT_cropped[0].numpy(), PlanCT_LM_cropped[0].numpy())
-
-		exit(0)
-
+		planct_spaced,planctLM_spaced = SpacingAndResampleToMatch(data_dicts[0]["PlanCT"], PlanCT_cropped, PlanCT_LM_cropped)
+		#display_LoadImgs(planct_spaced[0].numpy(), planctLM_spaced[0].numpy())
 		if False:
+			save_nifti_without_header(planct_spaced[0].numpy(), filename="PlanCT_Spaced.nii.gz")
+			save_nifti_without_header(planctLM_spaced[0].numpy(), filename="PlanCT_Spaced_LungMask.nii.gz")
+
+		LDCT_LM = CreateLungMasks(LDCT_tensor, save_root + "LDCT", True)
+		LDCT_cropped, LDCT_LM_cropped = CropBinary_monai(LDCT_tensor, torch.from_numpy(LDCT_LM))
+		ldct_spaced, ldctLM_spaced = SpacingAndResampleToMatch(data_dicts[0]["LDCT"], LDCT_cropped, LDCT_LM_cropped)
+		#display_LoadImgs(ldct_spaced[0].numpy(), ldctLM_spaced[0].numpy())
+		if False:
+			save_nifti_without_header(ldct_spaced[0].numpy(), filename="LDCT_Spaced.nii.gz")
+			save_nifti_without_header(ldctLM_spaced[0].numpy(), filename="LDCT_Spaced_LungMask.nii.gz")
 
 
-			#Cropping by method
-			ldct_cropped_1,pet_cropped_1=cropCTfromROI_lung(ldct_np,ldct_LM_np,pet_np,pet_bool=True)
+
 			ldct_cropped_2,pet_cropped_2 = cropCTfromROI_ClinicalInfo(ldct_np,ldct_LM_np,itv,clinicInfo_path,pxID,pet_np)
 			ldct_cropped_3,pet_cropped_3 = cropCTfromROI_BinaryPET(ldct_cropped_1,pet_cropped_1)
 
