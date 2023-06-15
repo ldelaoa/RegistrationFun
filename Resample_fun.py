@@ -4,6 +4,7 @@ from monai.utils import first, set_determinism
 from monai.transforms import (
     Compose,
     Spacingd,
+    ScaleIntensityRanged,
 )
 from monai.data import DataLoader, Dataset
 
@@ -20,18 +21,24 @@ def pixDimsfromNifti(nii_path):
 def SpacingAndResampleToMatch(nii_path,image,mask):
     target_pixels = pixDimsfromNifti(nii_path)
 
+    # To lung Mask Specs HU [-1,024; 600] and normalised to the 0–1 range
+    from_minmin_CT = -1024
+    from_maxmax_CT = 3071
+
+    to_minmin_CT = -1024
+    to_maxmax_CT = 600
+
     pictionary = [
         {"image": image_name, "mask": mask_name,"pixdims":pix_name}
         for image_name, mask_name,pix_name in zip([image], [mask],[target_pixels])
     ]
 
-    print("Goal PixDims: ",pictionary[0]["pixdims"])
-    print("Previous Shapes:",pictionary[0]["image"].shape,pictionary[0]["mask"].shape)
-
     spacing_transforms = Compose([
 
         Spacingd(keys=["image"], pixdim=pictionary[0]["pixdims"], mode="bilinear"),
         Spacingd(keys=["mask"], pixdim=[1,1,.5], mode="nearest"),
+        ScaleIntensityRanged(keys=["image"], a_min=from_minmin_CT, a_max=from_maxmax_CT, b_min=to_minmin_CT,
+                             b_max=to_maxmax_CT, clip=True),
         # ToTensord(keys=["image","mask"]),
     ])
 

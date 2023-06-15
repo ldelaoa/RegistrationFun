@@ -46,51 +46,46 @@ def main(nifti_root,clinicInfo_path,pxID):
 		PlanCT_LM = CreateLungMasks(PlanCT_tensor, save_root + "PlanCT", True)
 		PlanCT_cropped, PlanCT_LM_cropped = CropBinary_monai(PlanCT_tensor, torch.from_numpy(PlanCT_LM))
 		planct_spaced,planctLM_spaced = SpacingAndResampleToMatch(data_dicts[0]["PlanCT"], PlanCT_cropped, PlanCT_LM_cropped)
-		#display_LoadImgs(planct_spaced[0].numpy(), planctLM_spaced[0].numpy())
+		planct_clinic, planctLM_clinic = cropCTfromROI_ClinicalInfo_v2(planct_spaced, planctLM_spaced, clinicInfo_path,patientID)
 		if False:
 			save_nifti_without_header(planct_spaced[0].numpy(), filename="PlanCT_Spaced.nii.gz")
 			save_nifti_without_header(planctLM_spaced[0].numpy(), filename="PlanCT_Spaced_LungMask.nii.gz")
 
+			save_nifti_without_header(planct_clinic[0].numpy(), filename="PlanCT_Clinic.nii.gz")
+			save_nifti_without_header(planctLM_clinic[0].numpy(), filename="PlanCT_Clinic_LungMask.nii.gz")
+
+
 		LDCT_LM = CreateLungMasks(LDCT_tensor, save_root + "LDCT", True)
 		LDCT_cropped, LDCT_LM_cropped = CropBinary_monai(LDCT_tensor, torch.from_numpy(LDCT_LM))
 		ldct_spaced, ldctLM_spaced = SpacingAndResampleToMatch(data_dicts[0]["LDCT"], LDCT_cropped, LDCT_LM_cropped)
-		#display_LoadImgs(ldct_spaced[0].numpy(), ldctLM_spaced[0].numpy())
+		ldct_clinic, ldctLM_clinic = cropCTfromROI_ClinicalInfo_v2(ldct_spaced, ldctLM_spaced, clinicInfo_path,patientID)
 		if False:
 			save_nifti_without_header(ldct_spaced[0].numpy(), filename="LDCT_Spaced.nii.gz")
 			save_nifti_without_header(ldctLM_spaced[0].numpy(), filename="LDCT_Spaced_LungMask.nii.gz")
 
+			save_nifti_without_header(ldct_clinic[0].numpy(), filename="LDCT_ClinicC.nii.gz")
+			save_nifti_without_header(ldctLM_clinic[0].numpy(), filename="LDCT_ClinicC_LungMask.nii.gz")
+
+		exit(0)
 
 
-			ldct_cropped_2,pet_cropped_2 = cropCTfromROI_ClinicalInfo(ldct_np,ldct_LM_np,itv,clinicInfo_path,pxID,pet_np)
-			ldct_cropped_3,pet_cropped_3 = cropCTfromROI_BinaryPET(ldct_cropped_1,pet_cropped_1)
+		#Register
+		registCT1,registPET1 = Register_fun(planCt_cropped_1,ldct_cropped_1,pet_cropped_1,pxID)
+		registCT2,registPET2 = Register_fun(planCt_cropped_1,ldct_cropped_2,pet_cropped_2,pxID)
+		registCT3,registPET3 = Register_fun(planCt_cropped_1,ldct_cropped_3,pet_cropped_3,pxID)
 
-			# Crop Plan CT
-			planCt_cropped_1, _ = cropCTfromROI_lung(planCt_np, planCt_LM_np, None, pet_bool=False)
-			itv_cropped_1,_ = cropCTfromROI_lung(itv_np, planCt_LM_np, None, pet_bool=False)
-			planCt_LM_cropped_1,_ = cropCTfromROI_lung(planCt_LM_np, planCt_LM_np, None, pet_bool=False)
+		registCT1_norm = registCT1/np.max(registCT1)
+		registPET1_norm = (registPET1/np.max(registPET1))*5
 
-			np.savez(nifti_root+'MovingArrays.npz', array1=ldct_cropped_1, array2=ldct_cropped_2,array3=ldct_cropped_3)
-			np.savez(nifti_root+'TargetArrays.npz',array1=planCt_cropped_1,array2=planCt_LM_cropped_1,array3=itv_cropped_1)
+		registCT2_norm = registCT2/np.max(registCT2)
+		registPET2_norm = (registPET2/np.max(registPET2))*5
 
+		registCT3_norm = registCT3/np.max(registCT3)
+		registPET3_norm = (registPET3/np.max(registPET3))*5
 
-
-			#Register
-			registCT1,registPET1 = Register_fun(planCt_cropped_1,ldct_cropped_1,pet_cropped_1,pxID)
-			registCT2,registPET2 = Register_fun(planCt_cropped_1,ldct_cropped_2,pet_cropped_2,pxID)
-			registCT3,registPET3 = Register_fun(planCt_cropped_1,ldct_cropped_3,pet_cropped_3,pxID)
-
-			registCT1_norm = registCT1/np.max(registCT1)
-			registPET1_norm = (registPET1/np.max(registPET1))*5
-
-			registCT2_norm = registCT2/np.max(registCT2)
-			registPET2_norm = (registPET2/np.max(registPET2))*5
-
-			registCT3_norm = registCT3/np.max(registCT3)
-			registPET3_norm = (registPET3/np.max(registPET3))*5
-
-			#displayRegist(registCT1,registCT2,registCT3,itv_np,planCt_np,planCt_LM_np)
-			displayRegist(registCT1,registCT2,registCT3,itv_cropped_1,planCt_cropped_1,itv_cropped_1)
-			displayRegist(registCT1_norm+registPET1_norm,registCT2_norm+registPET2_norm,registCT3_norm+registPET3_norm,itv_cropped_1,planCt_cropped_1,itv_cropped_1)
+		#displayRegist(registCT1,registCT2,registCT3,itv_np,planCt_np,planCt_LM_np)
+		displayRegist(registCT1,registCT2,registCT3,itv_cropped_1,planCt_cropped_1,itv_cropped_1)
+		displayRegist(registCT1_norm+registPET1_norm,registCT2_norm+registPET2_norm,registCT3_norm+registPET3_norm,itv_cropped_1,planCt_cropped_1,itv_cropped_1)
 
 		return 0
 
