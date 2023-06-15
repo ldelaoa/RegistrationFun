@@ -4,8 +4,6 @@ from monai.transforms import (
     Compose,
     LoadImaged,
     Orientationd,
-    ScaleIntensityRanged,
-    CropForegroundd,
     Rotate90d,
     ToTensord,
 )
@@ -47,11 +45,6 @@ def ReadAndOrient_monai(dictionary):
             Orientationd(keys=["PlanCT", "ITV"], axcodes="LAS"), #(L', 'R'), ('P', 'A'), ('I', 'S'))
             Orientationd(keys=[ "LDCT","PET"], axcodes="LAI"),  # (L', 'R'), ('P', 'A'), ('I', 'S'))
             Rotate90d(keys=image_keys, k=1, spatial_axes=(0, 1)),
-
-
-            #ScaleIntensityRanged(keys=["PlanCT","LDCT"], a_min=from_minmin_CT, a_max=from_maxmax_CT, b_min=to_minmin_CT, b_max=to_maxmax_CT, clip=True),
-            #CropForegroundd(keys="PlanCT", source_key="PlanCT",k_divisible=[256,256,2]),
-            #CropForegroundd(keys="LDCT", source_key="LDCT", k_divisible=[256,256,2]),
             ToTensord(keys=image_keys),
         ]
     )

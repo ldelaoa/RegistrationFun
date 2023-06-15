@@ -12,7 +12,7 @@ def CreateLungMasks(image_tensor,save_path,save_bool):
     print("ImageNP shape: ",image_np.shape)
     print('Creating Lung Mask: ')
     lung_path = save_path + '_LungMask.nii.gz'
-    if os.path.exists(lung_path):
+    if False:#os.path.exists(lung_path):
         print("LM already existing")
         lungmask_nii = nib.load(lung_path)
         lungmask_np = lungmask_nii.get_fdata()
@@ -24,10 +24,10 @@ def CreateLungMasks(image_tensor,save_path,save_bool):
         #first axis containing slices
         #second axis with chest to back
         #third axis with right to left
-        image_np = np.transpose(image_np,[2,1,0])
+        image_np = np.transpose(image_np,[2,0,1])
         lungmask = lungmask_fun.apply(image_np)  # default model is U-net(R231)
-        lungmask = np.transpose(lungmask, [2,1,0])
-        image_np = np.transpose(image_np, [2,1,0])
+        lungmask = np.transpose(lungmask, [1,2,0])
+        image_np = np.transpose(image_np, [1,2,0])
         print("Sum: ", np.sum(lungmask)," Shape: ",lungmask.shape)
         if save_bool:
             print("SAving LM")

@@ -42,30 +42,18 @@ def main(nifti_root,clinicInfo_path,pxID):
 		#From Path to NP - For now only LDCT, LDCT_LM and PET
 		PlanCT_tensor, LDCT_tensor = ReadAndOrient_monai(data_dicts)
 
-		PlanCT_LM = CreateLungMasks(PlanCT_tensor, save_root + "PlanCT", True)
-		#display_LoadImgs(PlanCT_tensor.numpy(), PlanCT_LM)
-		print(PlanCT_tensor.shape, torch.from_numpy(PlanCT_LM).shape)
-		PlanCT_cropped, PlanCT_LM_cropped = CropBinary_monai(PlanCT_tensor, torch.from_numpy(PlanCT_LM))
-		print(PlanCT_cropped.shape,PlanCT_LM_cropped.shape)
-		display_LoadImgs(PlanCT_cropped.numpy(), PlanCT_LM_cropped.numpy())
-		exit(0)
-
 		LDCT_LM = CreateLungMasks(LDCT_tensor, save_root+"LDCT",True)
 		#display_LoadImgs(LDCT_tensor.numpy(), LDCT_LM)
-		LDCT_cropped, LDCT_LM_cropped = CropBinary_monai(LDCT_tensor, LDCT_LM)
-		display_LoadImgs(LDCT_cropped.numpy(), LDCT_LM_cropped.numpy())
+		LDCT_cropped, LDCT_LM_cropped = CropBinary_monai(LDCT_tensor, torch.from_numpy(LDCT_LM))
+		display_LoadImgs(LDCT_cropped[0].numpy(), LDCT_LM_cropped[0].numpy())
+
+		PlanCT_LM = CreateLungMasks(PlanCT_tensor, save_root + "PlanCT", True)
+		# display_LoadImgs(PlanCT_tensor.numpy(), PlanCT_LM)
+		PlanCT_cropped, PlanCT_LM_cropped = CropBinary_monai(PlanCT_tensor, torch.from_numpy(PlanCT_LM))
+		print(PlanCT_cropped.shape, PlanCT_LM_cropped.shape)
+		display_LoadImgs(PlanCT_cropped[0].numpy(), PlanCT_LM_cropped[0].numpy())
 
 		exit(0)
-
-		plt.imshow(PlanCT_LM[:, :, 70], 'gray')
-		plt.interactive(False)
-		plt.show()
-
-		plt.imshow(LDCT_LM[:, :, 70], 'gray')
-		plt.interactive(False)
-		plt.show()
-
-
 
 		if False:
 
