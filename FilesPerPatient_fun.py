@@ -34,6 +34,4 @@ def FilesPerPatient(file_path):
         {"PlanCT": plan_ct_name,"ITV":itv_name, "LDCT": ldct_name, "PET": pet_name}
         for plan_ct_name, itv_name, ldct_name, pet_name in zip(plan_ct,itv,pet_ct,pet)
     ]
-    print("Dictionary Created")
     return plan_ct,pet_ct,data_dicts
-    #return data_dicts

@@ -6,8 +6,6 @@
 #from skimage.draw import polygon
 #import SimpleITK as sitk
 #import pydicom as dicom
-#from pydicom.tag import Tag
-#import sys
 
 
 #import nibabel as nib
@@ -40,14 +38,61 @@ def main(nifti_root,clinicInfo_path,pxID):
 
 	#Main - len(itv)!=0 and len(plan_ct)!=0 and len(plan_ct_LM)!=0 and len(pet_filename)!=0:
 	if True: #len(ldct)!=0 and len(ldct_LM)!=0 and len(pet)!=0:
-		#From Path to NP - For now only LDCT, LDCT_LM and PET
-		PlanCT_tensor, LDCT_tensor = ReadAndOrient_monai(data_dicts)
+		#Read and Orient
+		PlanCT_tensor,ITV_tensor,LDCT_tensor,PET_tensor = ReadAndOrient_monai(data_dicts)
+		# LDCT and PET
+		# PET can not be crop with the first lung mask because x,y is different spacing than LM, so we first need to space it properly and then crop it with the lung mask.
+		# To do so I think we need to separate Resampling into a different function with spacing, so we can Space it with the apropiate path, without needing to Rescale it.
+		# ResamplingSpacingPET
+		# CreateLungMask_LDCT
+		# CropBinaryLDCT
+		# CropBinaryPET
+		# SpacingLDCT
+		# SpacingPET
+		# CropClinicalLDCT
+		# CropClinicalPET
+		# IntensityLDCT
 
+		pet_Resampled = OnlyResamplingPET(LDCT_tensor, PET_tensor)
+		print(pet_Resampled.shape,LDCT_tensor.shape)
+		LDCT_LM = CreateLungMasks(LDCT_tensor, save_root + "LDCT", True)
+		LDCT_cropped, LDCT_LM_cropped = CropBinary_monai(LDCT_tensor, torch.from_numpy(LDCT_LM))
+		PET_cropped, _ = CropBinary_monai(pet_Resampled, torch.from_numpy(LDCT_LM))
+		LDCT_spaced,LDCT_LM_spaced = OnlySpacing_fun(LDCT_cropped, LDCT_LM_cropped, data_dicts[0]["LDCT"])
+		PET_spaced, _ = OnlySpacing_fun(PET_cropped, LDCT_LM_cropped, data_dicts[0]["LDCT"])
+		#ldct_intensity = OnlyIntensity_fun(LDCT_spaced,0)
+		ldct_clinic, ldctLM_clinic = cropCTfromROI_ClinicalInfo_v2(LDCT_spaced, LDCT_LM_spaced, clinicInfo_path,patientID)
+		pet_clinic, _ = cropCTfromROI_ClinicalInfo_v2(PET_spaced, LDCT_LM_spaced, clinicInfo_path, patientID)
+		print("Moving shapes:", ldct_clinic.shape, ldctLM_clinic.shape, pet_clinic.shape)
+
+		if True:
+			save_nifti_without_header(LDCT_spaced[0].numpy(), filename="LDCT_LungCropped.nii.gz")
+			save_nifti_without_header(LDCT_LM_spaced[0].numpy(), filename="LDCT_LungCropped_LungMask.nii.gz")
+
+			save_nifti_without_header(ldct_clinic[0].numpy(), filename="LDCT_ClinicC.nii.gz")
+			save_nifti_without_header(ldctLM_clinic[0].numpy(), filename="LDCT_ClinicC_LungMask.nii.gz")
+
+		#PLAN CT
+		#CreateLungMask PlanCT
+		# CropBinary PlanCT
+		# CropBinarITV
+		# Spacing PLanCT
+		# Spacing ITV
+		# CropClinical PlanCT
+		# CropClinical ITV
+		# Intensity PlanCT
 		PlanCT_LM = CreateLungMasks(PlanCT_tensor, save_root + "PlanCT", True)
 		PlanCT_cropped, PlanCT_LM_cropped = CropBinary_monai(PlanCT_tensor, torch.from_numpy(PlanCT_LM))
-		planct_spaced,planctLM_spaced = SpacingAndResampleToMatch(data_dicts[0]["PlanCT"], PlanCT_cropped, PlanCT_LM_cropped)
-		planct_clinic, planctLM_clinic = cropCTfromROI_ClinicalInfo_v2(planct_spaced, planctLM_spaced, clinicInfo_path,patientID)
-		if True:
+		ITV_cropped, _ = CropBinary_monai(ITV_tensor, torch.from_numpy(PlanCT_LM))
+		planCT_spaced,planCTLM_spaced = OnlySpacing_fun(PlanCT_cropped, PlanCT_LM_cropped,data_dicts[0]["PlanCT"])
+		itv_spaced, _ = OnlySpacing_fun(ITV_cropped, PlanCT_LM_cropped,data_dicts[0]["PlanCT"])
+		#planCT_intensity = OnlyIntensity_fun(planCT_spaced, selectVal_opt=0)
+		planct_clinic, planctLM_clinic = cropCTfromROI_ClinicalInfo_v2(planCT_spaced, planCTLM_spaced, clinicInfo_path,patientID)
+		itv_clinic, _ = cropCTfromROI_ClinicalInfo_v2(itv_spaced, planCTLM_spaced, clinicInfo_path,patientID)
+		print("Target shapes:",planct_clinic.shape,planctLM_clinic.shape,itv_clinic.shape)
+
+
+		if False:
 			save_nifti_without_header(planct_spaced[0].numpy(), filename="PlanCT_Spaced.nii.gz")
 			save_nifti_without_header(planctLM_spaced[0].numpy(), filename="PlanCT_Spaced_LungMask.nii.gz")
 
@@ -55,20 +100,7 @@ def main(nifti_root,clinicInfo_path,pxID):
 			save_nifti_without_header(planctLM_clinic[0].numpy(), filename="PlanCT_Clinic_LungMask.nii.gz")
 
 
-		LDCT_LM = CreateLungMasks(LDCT_tensor, save_root + "LDCT", True)
-		LDCT_cropped, LDCT_LM_cropped = CropBinary_monai(LDCT_tensor, torch.from_numpy(LDCT_LM))
-		ldct_spaced, ldctLM_spaced = SpacingAndResampleToMatch(data_dicts[0]["LDCT"], LDCT_cropped, LDCT_LM_cropped)
-		ldct_clinic, ldctLM_clinic = cropCTfromROI_ClinicalInfo_v2(ldct_spaced, ldctLM_spaced, clinicInfo_path,patientID)
-		if True:
-			save_nifti_without_header(ldct_spaced[0].numpy(), filename="LDCT_Spaced.nii.gz")
-			save_nifti_without_header(ldctLM_spaced[0].numpy(), filename="LDCT_Spaced_LungMask.nii.gz")
-
-			save_nifti_without_header(ldct_clinic[0].numpy(), filename="LDCT_ClinicC.nii.gz")
-			save_nifti_without_header(ldctLM_clinic[0].numpy(), filename="LDCT_ClinicC_LungMask.nii.gz")
-
-		exit(0)
-
-
+		display_LoadImgs(ldct_clinic,)
 		#Register
 		registCT1,registPET1 = Register_fun(planCt_cropped_1,ldct_cropped_1,pet_cropped_1,pxID)
 

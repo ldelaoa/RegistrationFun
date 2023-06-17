@@ -29,7 +29,7 @@ def ReadAndOrient_monai(dictionary):
             LoadImaged(keys=image_keys),
             EnsureChannelFirstd(keys=image_keys),
             Orientationd(keys=["PlanCT", "ITV"], axcodes="LAS"), #(L', 'R'), ('P', 'A'), ('I', 'S'))
-            Orientationd(keys=[ "LDCT","PET"], axcodes="LAI"),  # (L', 'R'), ('P', 'A'), ('I', 'S'))
+            Orientationd(keys=["LDCT","PET"], axcodes="LAI"),  # (L', 'R'), ('P', 'A'), ('I', 'S'))
             Rotate90d(keys=image_keys, k=1, spatial_axes=(0, 1)),
             ToTensord(keys=image_keys),
         ]
@@ -37,11 +37,10 @@ def ReadAndOrient_monai(dictionary):
 
     check_ds = Dataset(data=dictionary[:], transform=load_transforms)
     check_loader = DataLoader(check_ds, batch_size=1, num_workers=0)
-    print("First breakpoint")
     batch_data = first(check_loader)
-    PlanCT_tensor, LDCT_tensor = (batch_data["PlanCT"][0][0], batch_data["LDCT"][0][0])
-    print("Created Tensors")
-    return PlanCT_tensor, LDCT_tensor
+    PlanCT_tensor, ITV_tensor = (batch_data["PlanCT"][0][0], batch_data["ITV"][0][0])
+    LDCT_tensor, PET_tensor = (batch_data["LDCT"][0][0], batch_data["PET"][0][0])
+    return PlanCT_tensor,ITV_tensor,LDCT_tensor,PET_tensor
 
 
     def ReadAndResample_DEPRECATED(ldct_path, ldct_LM_path, pet_path, planCT_path, planCT_LM_path, itv_path):
