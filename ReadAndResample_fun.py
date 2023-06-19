@@ -29,7 +29,7 @@ def ReadAndOrient_monai(dictionary):
             LoadImaged(keys=image_keys),
             EnsureChannelFirstd(keys=image_keys),
             Orientationd(keys=["PlanCT", "ITV"], axcodes="LAS"), #(L', 'R'), ('P', 'A'), ('I', 'S'))
-            Orientationd(keys=["LDCT","PET"], axcodes="LAI"),  # (L', 'R'), ('P', 'A'), ('I', 'S'))
+            Orientationd(keys=["LDCT","PET"], axcodes="LAS"),  # (L', 'R'), ('P', 'A'), ('I', 'S'))
             Rotate90d(keys=image_keys, k=1, spatial_axes=(0, 1)),
             ToTensord(keys=image_keys),
         ]
