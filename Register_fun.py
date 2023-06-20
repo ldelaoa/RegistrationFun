@@ -19,15 +19,15 @@ def Register_fun(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
     registration_method.SetMetricSamplingPercentage(0.1)
     
     registration_method.SetInterpolator(sitk.sitkLinear)
-    
+
+
     registration_method.SetOptimizerAsGradientDescent(learningRate=1.0, numberOfIterations=400, convergenceMinimumValue=1e-6, convergenceWindowSize=10)
     registration_method.SetOptimizerScalesFromPhysicalShift()
-    
-    registration_method.SetInitialTransform(initial_transform, inPlace=False) 
+    registration_method.SetInitialTransform(initial_transform, inPlace=False)
     
     final_transform = registration_method.Execute(fixed_image, moving_image) 
     
-    print(f"Final metric value for patient {patient_number}: {registration_method.GetMetricValue()}") #MattesSimilarityMetric is similar to NCC, both use correlation in intensity
+    print(f"Final metric value for patient {patient_number}: {registration_method.GetMetricValue()}")
     print(f"Optimizer's stopping condition for patient {patient_number}: {registration_method.GetOptimizerStopConditionDescription()}")
     print(f"Iteration for patient {patient_number}: {registration_method.GetOptimizerIteration()}")
     moving_resampled = sitk.Resample(moving_image, fixed_image, final_transform, sitk.sitkLinear, 0.0, moving_image.GetPixelID())
@@ -50,32 +50,3 @@ def Register_fun(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
     
     return ldct_registered_np,pet_registered_np
     
-
-def Register_fun_v2(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
-
-    planning_ct = sitk.GetImageFromArray(planning_ct_np)
-    lowdose_ct = sitk.GetImageFromArray(lowdose_ct_np)
-    fixed_image = sitk.Cast(planning_ct, sitk.sitkFloat32)
-    moving_image = sitk.Cast(lowdose_ct, sitk.sitkFloat32)
-
-    registration_method = sitk.ImageRegistrationMethod()
-    registration_method.SetMetricAsMeanSquares()
-    registration_method.SetOptimizerAsGradientDescent(learningRate=1.0, numberOfIterations=100)
-    initial_transform = sitk.CenteredTransformInitializer(
-        fixed_image, moving_image, sitk.ScaleVersor3DTransform())
-    registration_method.SetInitialTransform(initial_transform)
-
-    registration_method.SetShrinkFactorsPerLevel(shrinkFactors=[4, 2, 1])
-    registration_method.SetSmoothingSigmasPerLevel(smoothingSigmas=[2, 1, 0])
-    final_transform = registration_method.Execute(fixed_image, moving_image)
-
-
-    registered_image = sitk.Resample(moving_image, fixed_image, final_transform, sitk.sitkLinear, 0.0)
-
-    pet_image = sitk.GetImageFromArray(pet_np)
-    registered_pet_image = sitk.Resample(pet_image, fixed_image, final_transform, sitk.sitkLinear, 0.0, moving_image.GetPixelID())
-
-    ldct_registered_np = sitk.GetArrayFromImage(registered_image)
-    pet_registered_np = sitk.GetArrayFromImage(registered_pet_image)
-
-    return ldct_registered_np,pet_registered_np
