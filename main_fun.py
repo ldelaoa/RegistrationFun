@@ -42,6 +42,7 @@ def main(nifti_root,clinicInfo_path,pxID):
 	#Main - len(itv)!=0 and len(plan_ct)!=0 and len(plan_ct_LM)!=0 and len(pet_filename)!=0:
 
 	if len(intermediate_dict)==0: #len(ldct)!=0 and len(ldct_LM)!=0 and len(pet)!=0:
+		print("Creating images for registration")
 		#Read and Orient
 		PlanCT_tensor,ITV_tensor,LDCT_tensor,PET_tensor = ReadAndOrient_monai(data_dicts)
 		# LDCT and PET
@@ -94,14 +95,18 @@ def main(nifti_root,clinicInfo_path,pxID):
 		print("Target Clinic shapes:", planct_clinic.shape, planctLM_clinic.shape, itv_clinic.shape)
 		print("Moving Clinic shapes:", ldct_clinic.shape, ldctLM_clinic.shape, pet_clinic.shape)
 
-	elif len(intermediate_dict)==1:
+		intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
 
-		#Register
-		registCT1_LM,registPET1_LM = Register_fun(planCT_spaced[0],LDCT_spaced[0],PET_spaced[0],pxID)
-		registCT1_Clinic, registPET1_Clinic = Register_fun(planct_clinic[0], ldct_clinic[0], pet_clinic[0], pxID)
+	if len(intermediate_dict)==1:
+		print("Inside Registration module")
 
-		registCT2_LM, registPET2_LM = Register_fun_v2(planCT_spaced[0], LDCT_spaced[0], PET_spaced[0], pxID)
-		registCT2_Clinic, registPET2_Clinic = Register_fun_v2(planct_clinic[0], ldct_clinic[0], pet_clinic[0], pxID)
+		PlanCT_LungCrop_tensor,ITV_LungCrop_tensor,PlanCT_LungMask_LungCrop_tensor,LDCT_LungCrop_tensor,PET_LungCrop_tensor,LDCT_LungMask_LungCrop_tensor = OnlyRead_Intermediate(intermediate_dict, True, False)
+		registCT1_LM,registPET1_LM = Register_fun(PlanCT_LungCrop_tensor[0],LDCT_LungCrop_tensor[0],PET_LungCrop_tensor[0],pxID)
+		registCT2_LM, registPET2_LM = Register_fun_v2(PlanCT_LungCrop_tensor[0], LDCT_LungCrop_tensor[0], PET_LungCrop_tensor[0], pxID)
+
+		PlanCT_Clinic_tensor, ITV_Clinic_tensor, PlanCT_LungMask_Clinic_tensor, LDCT_Clinic_tensor, PET_Clinic_tensor, LDCT_LungMask_Clinic_tensor = OnlyRead_Intermediate(intermediate_dict, False, True)
+		registCT1_Clinic, registPET1_Clinic = Register_fun(PlanCT_Clinic_tensor[0], LDCT_Clinic_tensor[0], PET_Clinic_tensor[0], pxID)
+		registCT2_Clinic, registPET2_Clinic = Register_fun_v2(PlanCT_Clinic_tensor[0], LDCT_Clinic_tensor[0], PET_Clinic_tensor[0], pxID)
 
 
 		return 0

@@ -21,6 +21,35 @@ def save_nifti_without_header(data, filename):
     nib.save(img, filename)
 
 
+def OnlyRead_Intermediate(dictionary,LungCropTensors_bool,clinicTensors_bool):
+    image_keys_lungCrop = ["PlanCT_LungCrop","ITV_LungCrop","PlanCT_LungMask_LungCrop","LDCT_LungCrop","PET_LungCrop","LDCT_LungMask_LungCrop"]
+    image_keys_Clinic = ["PlanCT_Clinic", "ITV_Clinic","PlanCT_LungMask_Clinic","LDCT_Clinic", "PET_Clinic","LDCT_LungMask_Clinic"]
+    if not LungCropTensors_bool and clinicTensors_bool: # Only Clinic TRUE
+        image_keys = image_keys_Clinic
+    if LungCropTensors_bool and not clinicTensors_bool:  # Only Clinic TRUE
+        image_keys = image_keys_lungCrop
+
+    load_transforms = Compose(
+        [LoadImaged(keys=image_keys),EnsureChannelFirstd(keys=image_keys),])
+
+    check_ds = Dataset(data=dictionary[:], transform=load_transforms)
+    check_loader = DataLoader(check_ds, batch_size=1, num_workers=0)
+    batch_data = first(check_loader)
+
+
+    if LungCropTensors_bool and not clinicTensors_bool: # Only LungCrop TRUE
+        PlanCT_LungCrop_tensor, ITV_LungCrop_tensor, PlanCT_LungMask_LungCrop_tensor = (batch_data["PlanCT_LungCrop"][0],batch_data["ITV_LungCrop"][0],batch_data["PlanCT_LungMask_LungCrop"][0])
+        LDCT_LungCrop_tensor, PET_LungCrop_tensor, LDCT_LungMask_LungCrop_tensor = (batch_data["LDCT_LungCrop"][0],batch_data["PET_LungCrop"][0],batch_data["LDCT_LungMask_LungCrop"][0])
+
+        return PlanCT_LungCrop_tensor,ITV_LungCrop_tensor,PlanCT_LungMask_LungCrop_tensor,LDCT_LungCrop_tensor,PET_LungCrop_tensor,LDCT_LungMask_LungCrop_tensor
+
+    if not LungCropTensors_bool and clinicTensors_bool:  # Only Clinic TRUE
+        PlanCT_Clinic_tensor, ITV_Clinic_tensor, PlanCT_LungMask_Clinic_tensor = (batch_data["PlanCT_Clinic"][0], batch_data["ITV_Clinic"][0], batch_data["PlanCT_LungMask_Clinic"][0])
+        LDCT_Clinic_tensor, PET_Clinic_tensor, LDCT_LungMask_Clinic_tensor = (batch_data["LDCT_Clinic"][0], batch_data["PET_Clinic"][0], batch_data["LDCT_LungMask_Clinic"][0])
+
+        return PlanCT_Clinic_tensor, ITV_Clinic_tensor, PlanCT_LungMask_Clinic_tensor, LDCT_Clinic_tensor, PET_Clinic_tensor, LDCT_LungMask_Clinic_tensor
+
+
 def ReadAndOrient_monai(dictionary):
     image_keys = ["PlanCT", "ITV", "LDCT","PET"]
 
