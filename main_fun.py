@@ -26,6 +26,7 @@ from Register_fun_v2 import *
 from displayRegist_fun import *
 from Resample_fun import *
 import matplotlib.pyplot as plt
+from BinaryEvaluation_fun import *
 
 import torch
 
@@ -100,16 +101,33 @@ def main(nifti_root,clinicInfo_path,pxID):
 	if len(intermediate_dict)==1:
 		print("Inside Registration module")
 
-		if False:
-			PlanCT_LungCrop_tensor,ITV_LungCrop_tensor,PlanCT_LungMask_LungCrop_tensor,LDCT_LungCrop_tensor,PET_LungCrop_tensor,LDCT_LungMask_LungCrop_tensor = OnlyRead_Intermediate(intermediate_dict, True, False)
-			registCT1_LM,registPET1_LM = Register_fun(PlanCT_LungCrop_tensor[0],LDCT_LungCrop_tensor[0],PET_LungCrop_tensor[0],pxID)
-			registCT2_LM, registPET2_LM = Register_fun_v2(PlanCT_LungCrop_tensor[0], LDCT_LungCrop_tensor[0], PET_LungCrop_tensor[0], pxID)
+
+		PlanCT_LungCrop_tensor,ITV_LungCrop_tensor,PlanCT_LungMask_LungCrop_tensor,LDCT_LungCrop_tensor,PET_LungCrop_tensor,LDCT_LungMask_LungCrop_tensor = OnlyRead_Intermediate(intermediate_dict, True, False)
+		registCT1_LM,registPET1_LM = Register_fun(PlanCT_LungCrop_tensor[0],LDCT_LungCrop_tensor[0],PET_LungCrop_tensor[0],pxID)
+		registCT2_LM, registPET2_LM = Register_fun_v2(PlanCT_LungCrop_tensor[0], LDCT_LungCrop_tensor[0], PET_LungCrop_tensor[0], pxID)
 
 		PlanCT_Clinic_tensor, ITV_Clinic_tensor, PlanCT_LungMask_Clinic_tensor, LDCT_Clinic_tensor, PET_Clinic_tensor, LDCT_LungMask_Clinic_tensor = OnlyRead_Intermediate(intermediate_dict, False, True)
 		registCT1_Clinic, registPET1_Clinic = Register_fun(PlanCT_Clinic_tensor[0], LDCT_Clinic_tensor[0], PET_Clinic_tensor[0], pxID)
-		registCT2_Clinic, registPET2_Clinic = Register_fun_v2(PlanCT_Clinic_tensor[0], LDCT_Clinic_tensor[0], PET_Clinic_tensor[0], pxID)
-		registCT3_Clinic, registPET3_Clinic = Register_fun_v3(PlanCT_Clinic_tensor[0], LDCT_Clinic_tensor[0],PET_Clinic_tensor[0], pxID)
+		registCT2_Clinic, registPET2_Clinic = Register_fun_v3(PlanCT_Clinic_tensor[0], LDCT_Clinic_tensor[0],PET_Clinic_tensor[0], pxID)
 
+		#Binary
+		pet_clinic_binary = BinaryPET(registPET2_Clinic)
+		pet_LungCrop_binary = BinaryPET(registPET2_LM)
+
+		dice_Clinic, haus_Clinic = metrics_fun_v1(torch.from_numpy(pet_clinic_binary), ITV_Clinic_tensor[0])
+		dice_LungCrop, haus_LungCrop = metrics_fun_v1(torch.from_numpy(pet_LungCrop_binary), ITV_LungCrop_tensor[0])
+
+
+		if True:
+			save_nifti_without_header(registCT1_LM, filename=save_root + "LDCT_LungCrop_Register_v1.nii.gz")
+			save_nifti_without_header(registCT2_LM, filename=save_root + "LDCT_LungCrop_Register_v2.nii.gz")
+			save_nifti_without_header(registPET1_LM, filename=save_root + "PET_LungCrop_Register_v1.nii.gz")
+			save_nifti_without_header(registPET2_LM, filename=save_root + "PET_LungCrop_Register_v2.nii.gz")
+
+			save_nifti_without_header(registCT1_Clinic, filename=save_root+"LDCT_Clinic_Register_v1.nii.gz")
+			save_nifti_without_header(registCT2_Clinic, filename=save_root+"LDCT_Clinic_Register_v2.nii.gz")
+			save_nifti_without_header(registPET1_Clinic, filename=save_root + "PET_Clinic_Register_v1.nii.gz")
+			save_nifti_without_header(registPET2_Clinic, filename=save_root + "PET_Clinic_Register_v2.nii.gz")
 
 		return 0
 
@@ -137,6 +155,7 @@ if __name__ == "__main__":
 			main(nifti_root,clinicInfo_path,patientID)
 
 		total_px +=1
-		if total_px==4:
+		if total_px>0:
+			print("THE END")
 			break
 	

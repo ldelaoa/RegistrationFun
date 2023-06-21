@@ -2,8 +2,16 @@ from skimage.filters import threshold_multiotsu
 import numpy as np
 
 
+def BinaryPET(pet_cropped_1):
+    local_otsu = threshold_multiotsu(pet_cropped_1, classes=3)
+    otsu_lvl0 = local_otsu[0]
+    otsu_lvl1 = local_otsu[1]
+    binary_pet = pet_cropped_1 > otsu_lvl1
 
-def cropCTfromROI_BinaryPET(plan_ct_cropped_1,pet_cropped_1):
+    return binary_pet
+
+
+def cropCTfromROI_BinaryPET_DEPRECATED(plan_ct_cropped_1,pet_cropped_1):
     
     local_otsu = threshold_multiotsu(pet_cropped_1,classes=3)
     otsu_lvl0 = local_otsu[0]
