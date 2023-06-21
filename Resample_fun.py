@@ -20,7 +20,7 @@ def pixDimsfromNifti(nii_path):
     return spacing_pix
 
 
-def OnlyResamplingPET(imageTarget,imageMoving):
+def OnlyResamplingPET(imageTarget,imageMoving,device):
     pictionary = [
         {"imageTarget": imageTarget_name, "imageMoving": imageMoving_name}
         for imageTarget_name, imageMoving_name in zip([imageTarget], [imageMoving])
@@ -33,7 +33,7 @@ def OnlyResamplingPET(imageTarget,imageMoving):
     check_ds = Dataset(data=pictionary, transform=resample_transforms)
     check_loader = DataLoader(check_ds, batch_size=1, num_workers=0)
     batch_data = first(check_loader)
-    resampled_image = batch_data["imageMoving"]
+    resampled_image = batch_data["imageMoving"].to(device)
 
     return resampled_image[0][0]
 

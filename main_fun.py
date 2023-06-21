@@ -6,7 +6,7 @@
 #from skimage.draw import polygon
 #import SimpleITK as sitk
 #import pydicom as dicom
-
+import os.path
 
 #import nibabel as nib
 #from skimage.filters import threshold_multiotsu
@@ -31,25 +31,23 @@ from BinaryEvaluation_fun import *
 import torch
 
 
-def main(nifti_root,clinicInfo_path,pxID):
+def main(nifti_root,clinicInfo_path,pxID,device):
 	file_path = os.path.join(nifti_root,str(pxID))
 	save_root = nifti_root+str(pxID)+"/IntermediateImages/"
+	if not os.path.exists(save_root):
+		os.makedirs(save_root)
 
 	#Find Paths
 	planCT_path,ldct_path,data_dicts= FilesPerPatient(file_path)
 
 	intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
 
-	#Main - len(itv)!=0 and len(plan_ct)!=0 and len(plan_ct_LM)!=0 and len(pet_filename)!=0:
-
-	if len(intermediate_dict)==0: #len(ldct)!=0 and len(ldct_LM)!=0 and len(pet)!=0:
+	if len(intermediate_dict)==0 and len(data_dicts)==1:
 		print("Creating images for registration")
-		#Read and Orient
-		PlanCT_tensor,ITV_tensor,LDCT_tensor,PET_tensor = ReadAndOrient_monai(data_dicts)
-		# LDCT and PET
+		PlanCT_tensor,ITV_tensor,LDCT_tensor,PET_tensor = ReadAndOrient_monai(data_dicts,device)
 		# IntensityLDCT - Missing
-
-		pet_Resampled = OnlyResamplingPET(LDCT_tensor, PET_tensor)
+		print("PreResamplingPET")
+		pet_Resampled = OnlyResamplingPET(LDCT_tensor, PET_tensor,device)
 		print(pet_Resampled.shape,LDCT_tensor.shape)
 		LDCT_LM = CreateLungMasks(LDCT_tensor, save_root + "LDCT", True)
 		LDCT_cropped, LDCT_LM_cropped = CropBinary_monai(LDCT_tensor, torch.from_numpy(LDCT_LM))
@@ -132,11 +130,14 @@ def main(nifti_root,clinicInfo_path,pxID):
 		return 0
 
 	else:
-		print("Incomplete Patient")
+		print("Missing Images Patient")
 		return 1
 
 
 if __name__ == "__main__":
+
+	device_cuda = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+	print('device:', device_cuda)
 
 	nifti_root = "/home/umcg/Desktop/Ch2/Data/Registration5/"
 	clinicInfo_path = os.path.join(nifti_root,"CollectedwClinicalInfo.csv")
@@ -150,12 +151,10 @@ if __name__ == "__main__":
 	count_incomplete = []
 	total_px = 0
 	for patientID in id_column:
-		print(patientID)
-		if patientID != 32628:
-			main(nifti_root,clinicInfo_path,patientID)
+		print(patientID,total_px)
+		if patientID != 10539:
+			main(nifti_root,clinicInfo_path,patientID,device_cuda)
 
 		total_px +=1
-		if total_px>0:
-			print("THE END")
-			break
+	print("THE END")
 	

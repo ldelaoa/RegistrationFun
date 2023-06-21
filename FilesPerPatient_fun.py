@@ -13,21 +13,21 @@ def FilesPerPatient(file_path):
     #print(file_path)
     for root, dirs, files in os.walk(file_path, topdown=False):
         for f in files:
-            if ("Thorax" in f or "Ave" in f) and not("LungMask" in f) and (not("cropped" in f.lower()) or not("clinic" in f.lower())):
+            if ("Thorax" in f or "Ave" in f) and not("LungMask" in f) and (not("cropped" in f.lower()) or not("clinic" in f.lower())) and not"Register" in f:
                 plan_ct.append(os.path.join(file_path,f))
-            if ("AC_CT_Body" in f or "CT van PET" in f or "CT LD" in f or "AC CT" in f or "AC  CT" in f or "LD CT" in f or "rigide_ct" in f) and not("LungMask" in f) and (not("cropped" in f.lower()) or not("clinic" in f.lower())):
+            if ("AC_CT_Body" in f or "CT van PET" in f or "CT LD" in f or "AC CT" in f or "AC  CT" in f or "LD CT" in f or "rigide_ct" in f) and not("LungMask" in f) and (not("cropped" in f.lower()) or not("clinic" in f.lower())) and not"Register" in f:
                 pet_ct.append(os.path.join(file_path,f))
             
-            if ("Thorax" in f or "Ave" in f) and "LungMask" in f and (not("cropped" in f.lower()) or not("clinic" in f.lower())):
+            if ("Thorax" in f or "Ave" in f) and "LungMask" in f and (not("cropped" in f.lower()) or not("clinic" in f.lower())) and not"Register" in f:
                 plan_ct_LM.append(os.path.join(file_path,f))
                 
-            if ("AC_CT_Body" in f or "CT van PET" in f or "CT LD" in f or "AC CT" in f or "AC  CT" in f or "LD CT" in f or "rigide_ct" in f) and "LungMask" in f and (not("cropped" in f.lower()) or not("clinic" in f.lower())):
+            if ("AC_CT_Body" in f or "CT van PET" in f or "CT LD" in f or "AC CT" in f or "AC  CT" in f or "LD CT" in f or "rigide_ct" in f) and "LungMask" in f and (not("cropped" in f.lower()) or not("clinic" in f.lower())) and not"Register" in f:
                 pet_ct_LM.append(os.path.join(file_path,f))
                 
-            if ("ITVtumor" in f or "ITV" in f or "GTVtumor" in f or "GTV" in f) and not("cropped" in f.lower() or "clinic" in f.lower()):
+            if ("ITVtumor" in f or "ITV" in f or "GTVtumor" in f or "GTV" in f) and not("cropped" in f.lower() or "clinic" in f.lower()) and not"Register" in f:
                 itv.append(os.path.join(file_path,f))
             
-            if "pet" in f.lower() and (not("cropped" in f.lower()) or not("clinic" in f.lower())):
+            if "pet" in f.lower() and (not("cropped" in f.lower()) or not("clinic" in f.lower())) and not"Register" in f:
                 pet.append(os.path.join(file_path,f))
 
     data_dicts = [
@@ -49,21 +49,21 @@ def FilesperPatient_Inter_LungCroped(file_path):
     # print(file_path)
     for root, dirs, files in os.walk(file_path, topdown=False):
         for f in files:
-            if ("PlanCT" in f) and not ("LungMask" in f) and "cropped" in f.lower() and not("clinic" in f.lower()):
+            if ("PlanCT" in f) and not ("LungMask" in f) and "cropped" in f.lower() and not("clinic" in f.lower()) and not"Register" in f:
                 planct_path.append(os.path.join(file_path, f))
-            if ("LDCT" in f) and not ("LungMask" in f) and "cropped" in f.lower() and not("clinic" in f.lower()):
+            if ("LDCT" in f) and not ("LungMask" in f) and "cropped" in f.lower() and not("clinic" in f.lower()) and not"Register" in f:
                 ldct_path.append(os.path.join(file_path, f))
 
-            if ("PlanCT" in f) and "LungMask" in f and "cropped" in f.lower() and not("clinic" in f.lower()):
+            if ("PlanCT" in f) and "LungMask" in f and "cropped" in f.lower() and not("clinic" in f.lower()) and not"Register" in f:
                 planct_LM_path.append(os.path.join(file_path, f))
 
-            if ("LDCT" in f) and "LungMask" in f and "cropped" in f.lower() and not("clinic" in f.lower()):
+            if ("LDCT" in f) and "LungMask" in f and "cropped" in f.lower() and not("clinic" in f.lower()) and not"Register" in f:
                 ldct_LM_path.append(os.path.join(file_path, f))
 
-            if ("ITVtumor" in f or "ITV" in f or "GTVtumor" in f or "GTV" in f) and "cropped" in f.lower() and not("clinic" in f.lower()):
+            if ("ITVtumor" in f or "ITV" in f or "GTVtumor" in f or "GTV" in f) and "cropped" in f.lower() and not("clinic" in f.lower()) and not"Register" in f:
                 itv_path.append(os.path.join(file_path, f))
 
-            if "pet" in f.lower() and "cropped" in f.lower() and not ("clinic" in f.lower()):
+            if "pet" in f.lower() and "cropped" in f.lower() and not ("clinic" in f.lower()) and not"Register" in f:
                 pet_path.append(os.path.join(file_path, f))
 
     planct_clinic = []
@@ -75,20 +75,20 @@ def FilesperPatient_Inter_LungCroped(file_path):
 
     for root, dirs, files in os.walk(file_path, topdown=False):
         for f in files:
-            if "pet" in f.lower() and "clinic" in f.lower() and not("cropped" in f.lower()):
+            if "pet" in f.lower() and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 pet_clinic.append(os.path.join(file_path, f))
-            if ("PlanCT" in f) and not ("LungMask" in f) and "clinic" in f.lower() and not("cropped" in f.lower()):
+            if ("PlanCT" in f) and not ("LungMask" in f) and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 planct_clinic.append(os.path.join(file_path, f))
-            if ("LDCT" in f) and not ("LungMask" in f) and "clinic" in f.lower() and not("cropped" in f.lower()):
+            if ("LDCT" in f) and not ("LungMask" in f) and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 ldct_clinic.append(os.path.join(file_path, f))
 
-            if ("planct" in f.lower()) and "LungMask" in f and "clinic" in f.lower() and not("cropped" in f.lower()):
+            if ("planct" in f.lower()) and "LungMask" in f and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 planct_LM_clinic.append(os.path.join(file_path, f))
 
-            if ("LDCT" in f) and "LungMask" in f and "clinic" in f.lower() and not("cropped" in f.lower()):
+            if ("LDCT" in f) and "LungMask" in f and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 ldct_LM_clinic.append(os.path.join(file_path, f))
 
-            if ("ITV" in f) and "clinic" in f.lower() and not("cropped" in f.lower()):
+            if ("ITV" in f) and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 itv_clinic.append(os.path.join(file_path, f))
 
 

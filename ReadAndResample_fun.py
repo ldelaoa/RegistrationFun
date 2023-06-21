@@ -50,7 +50,7 @@ def OnlyRead_Intermediate(dictionary,LungCropTensors_bool,clinicTensors_bool):
         return PlanCT_Clinic_tensor, ITV_Clinic_tensor, PlanCT_LungMask_Clinic_tensor, LDCT_Clinic_tensor, PET_Clinic_tensor, LDCT_LungMask_Clinic_tensor
 
 
-def ReadAndOrient_monai(dictionary):
+def ReadAndOrient_monai(dictionary,device):
     image_keys = ["PlanCT", "ITV", "LDCT","PET"]
 
     load_transforms = Compose(
@@ -67,8 +67,8 @@ def ReadAndOrient_monai(dictionary):
     check_ds = Dataset(data=dictionary[:], transform=load_transforms)
     check_loader = DataLoader(check_ds, batch_size=1, num_workers=0)
     batch_data = first(check_loader)
-    PlanCT_tensor, ITV_tensor = (batch_data["PlanCT"][0][0], batch_data["ITV"][0][0])
-    LDCT_tensor, PET_tensor = (batch_data["LDCT"][0][0], batch_data["PET"][0][0])
+    PlanCT_tensor, ITV_tensor = (batch_data["PlanCT"][0][0].to(device), batch_data["ITV"][0][0].to(device))
+    LDCT_tensor, PET_tensor = (batch_data["LDCT"][0][0].to(device), batch_data["PET"][0][0].to(device))
     return PlanCT_tensor,ITV_tensor,LDCT_tensor,PET_tensor
 
 
