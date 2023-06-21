@@ -10,8 +10,6 @@ from monai.data import DataLoader, Dataset
 
 
 def CropBinary_monai(image,mask):
-    #pictionary = {"image": image, "mask": mask} This doesn't work
-
     pictionary = [
         {"image": image_name, "mask": mask_name}
         for image_name, mask_name in zip([image], [mask])

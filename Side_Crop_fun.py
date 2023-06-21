@@ -27,7 +27,6 @@ def Side_Crop(image,mask,key):
         print("Error")
         exit(1)
 
-
-    image_side, mask_side = CropBinary_monai(image[0],torch.from_numpy(areaLung)[0])
+    image_side, mask_side = CropBinary_monai(image[0],torch.from_numpy(areaLung.squeeze()))
 
     return image_side,mask_side

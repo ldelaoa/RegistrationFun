@@ -26,8 +26,8 @@ def Register_fun(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
     registration_method.SetInitialTransform(initial_transform, inPlace=False)
     
     final_transform = registration_method.Execute(fixed_image, moving_image) 
-    
-    print(f"Final metric value for patient {patient_number}: {registration_method.GetMetricValue()}")
+    evaluationMetric = registration_method.GetMetricValue()
+    print(f"Final metric value for patient {patient_number}: {evaluationMetric}")
     print(f"Optimizer's stopping condition for patient {patient_number}: {registration_method.GetOptimizerStopConditionDescription()}")
     print(f"Iteration for patient {patient_number}: {registration_method.GetOptimizerIteration()}")
     moving_resampled = sitk.Resample(moving_image, fixed_image, final_transform, sitk.sitkLinear, 0.0, moving_image.GetPixelID())
@@ -48,5 +48,5 @@ def Register_fun(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
     ldct_registered_np = sitk.GetArrayFromImage(moving_resampled)
     pet_registered_np = sitk.GetArrayFromImage(registered_pet_image)
     
-    return ldct_registered_np,pet_registered_np
+    return ldct_registered_np,pet_registered_np,evaluationMetric
     

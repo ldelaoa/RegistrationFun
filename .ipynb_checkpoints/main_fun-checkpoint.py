@@ -31,39 +31,32 @@ from BinaryEvaluation_fun import *
 import torch
 
 
-def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered):
+def main(nifti_root,clinicInfo_path,pxID,device,save_path):
 	file_path = os.path.join(nifti_root,str(pxID))
 	save_root = save_path+str(pxID)+"/"
 	if not os.path.exists(save_root):
 		os.makedirs(save_root)
-	save_register = save_Registered+str(pxID)+"/"
-	if not os.path.exists(save_register):
-		os.makedirs(save_register)
 
 	#Find Paths
 	planCT_path,ldct_path,data_dicts= FilesPerPatient(file_path)
 
 	intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
-	registered_dict = FilesPerPatient_Registered(save_register)
-
-
 
 	if len(intermediate_dict)==0 and len(data_dicts)==1:
 		print("Creating images for registration")
-		PlanCT_tensor,ITV_tensor,LDCT_CUDAtensor,PET_CUDAtensor = ReadAndOrient_monai(data_dicts,device)
+		PlanCT_tensor,ITV_tensor,LDCT_tensor,PET_tensor = ReadAndOrient_monai(data_dicts,device)
+		# IntensityLDCT - Missing
 		print("PreResamplingPET")
-		pet_CUDAResampled = OnlyResamplingPET(LDCT_CUDAtensor, PET_CUDAtensor,device)
-		print(pet_CUDAResampled.shape,LDCT_CUDAtensor.shape)
-		LDCT_tensor = LDCT_CUDAtensor.cpu()
-		pet_Resampled=pet_CUDAResampled.to('cpu')
+		pet_Resampled = OnlyResamplingPET(LDCT_tensor, PET_tensor,device)
+		print(pet_Resampled.shape,LDCT_tensor.shape)
 		LDCT_LM = CreateLungMasks(LDCT_tensor, save_root + "LDCT", True)
 		LDCT_cropped, LDCT_LM_cropped = CropBinary_monai(LDCT_tensor, torch.from_numpy(LDCT_LM))
 		PET_cropped, _ = CropBinary_monai(pet_Resampled, torch.from_numpy(LDCT_LM))
 		LDCT_spaced,LDCT_LM_spaced = OnlySpacing_fun(LDCT_cropped, LDCT_LM_cropped, data_dicts[0]["LDCT"])
 		PET_spaced, _ = OnlySpacing_fun(PET_cropped, LDCT_LM_cropped, data_dicts[0]["LDCT"])
 		#ldct_intensity = OnlyIntensity_fun(LDCT_spaced,0)
-		ldct_clinic, ldctLM_clinic = cropCTfromROI_ClinicalInfo_v2(LDCT_spaced, LDCT_LM_spaced, clinicInfo_path,pxID)
-		pet_clinic, _ = cropCTfromROI_ClinicalInfo_v2(PET_spaced, LDCT_LM_spaced, clinicInfo_path, pxID)
+		ldct_clinic, ldctLM_clinic = cropCTfromROI_ClinicalInfo_v2(LDCT_spaced, LDCT_LM_spaced, clinicInfo_path,patientID)
+		pet_clinic, _ = cropCTfromROI_ClinicalInfo_v2(PET_spaced, LDCT_LM_spaced, clinicInfo_path, patientID)
 
 		if True:
 			save_nifti_without_header(LDCT_spaced[0].numpy(), filename=save_root+"LDCT_LungCropped.nii.gz")
@@ -83,8 +76,8 @@ def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered):
 		planCT_spaced,planCTLM_spaced = OnlySpacing_fun(PlanCT_cropped, PlanCT_LM_cropped,data_dicts[0]["PlanCT"])
 		itv_spaced, _ = OnlySpacing_fun(ITV_cropped, PlanCT_LM_cropped,data_dicts[0]["PlanCT"])
 		#planCT_intensity = OnlyIntensity_fun(planCT_spaced, selectVal_opt=0)
-		planct_clinic, planctLM_clinic = cropCTfromROI_ClinicalInfo_v2(planCT_spaced, planCTLM_spaced, clinicInfo_path,pxID)
-		itv_clinic, _ = cropCTfromROI_ClinicalInfo_v2(itv_spaced, planCTLM_spaced, clinicInfo_path,pxID)
+		planct_clinic, planctLM_clinic = cropCTfromROI_ClinicalInfo_v2(planCT_spaced, planCTLM_spaced, clinicInfo_path,patientID)
+		itv_clinic, _ = cropCTfromROI_ClinicalInfo_v2(itv_spaced, planCTLM_spaced, clinicInfo_path,patientID)
 
 		if True:
 			save_nifti_without_header(planCT_spaced[0].numpy(), filename=save_root+"PlanCT_LungCropped.nii.gz")
@@ -103,40 +96,62 @@ def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered):
 
 		intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
 
-	if len(intermediate_dict)==1 and len(registered_dict)==0:
+	if len(intermediate_dict)==1:
 		print("Inside Registration module")
 
 
 		PlanCT_LungCrop_tensor,ITV_LungCrop_tensor,PlanCT_LungMask_LungCrop_tensor,LDCT_LungCrop_tensor,PET_LungCrop_tensor,LDCT_LungMask_LungCrop_tensor = OnlyRead_Intermediate(intermediate_dict, True, False)
-		registCT1_LM,registPET1_LM,_ = Register_fun(PlanCT_LungCrop_tensor[0],LDCT_LungCrop_tensor[0],PET_LungCrop_tensor[0],pxID)
-		registCT2_LM, registPET2_LM,_ = Register_fun_v2(PlanCT_LungCrop_tensor[0], LDCT_LungCrop_tensor[0], PET_LungCrop_tensor[0], pxID)
+		registCT1_LM,registPET1_LM = Register_fun(PlanCT_LungCrop_tensor[0],LDCT_LungCrop_tensor[0],PET_LungCrop_tensor[0],pxID)
+		registCT2_LM, registPET2_LM = Register_fun_v2(PlanCT_LungCrop_tensor[0], LDCT_LungCrop_tensor[0], PET_LungCrop_tensor[0], pxID)
 
 		PlanCT_Clinic_tensor, ITV_Clinic_tensor, PlanCT_LungMask_Clinic_tensor, LDCT_Clinic_tensor, PET_Clinic_tensor, LDCT_LungMask_Clinic_tensor = OnlyRead_Intermediate(intermediate_dict, False, True)
-		registCT1_Clinic, registPET1_Clinic,_ = Register_fun(PlanCT_Clinic_tensor[0], LDCT_Clinic_tensor[0], PET_Clinic_tensor[0], pxID)
-		registCT2_Clinic, registPET2_Clinic,_ = Register_fun_v3(PlanCT_Clinic_tensor[0], LDCT_Clinic_tensor[0],PET_Clinic_tensor[0], pxID)
+		registCT1_Clinic, registPET1_Clinic = Register_fun(PlanCT_Clinic_tensor[0], LDCT_Clinic_tensor[0], PET_Clinic_tensor[0], pxID)
+		registCT2_Clinic, registPET2_Clinic = Register_fun_v3(PlanCT_Clinic_tensor[0], LDCT_Clinic_tensor[0],PET_Clinic_tensor[0], pxID)
+
+		#Binary
+		pet_clinic_binary = BinaryPET(registPET2_Clinic)
+		pet_LungCrop_binary = BinaryPET(registPET2_LM)
+
+		dice_Clinic, haus_Clinic = metrics_fun_v1(torch.from_numpy(pet_clinic_binary), ITV_Clinic_tensor[0])
+		dice_LungCrop, haus_LungCrop = metrics_fun_v1(torch.from_numpy(pet_LungCrop_binary), ITV_LungCrop_tensor[0])
+
 
 		if True:
-			save_nifti_without_header(registCT1_LM, filename=save_register + "LDCT_LungCrop_Register_v1.nii.gz")
-			save_nifti_without_header(registCT2_LM, filename=save_register + "LDCT_LungCrop_Register_v2.nii.gz")
-			save_nifti_without_header(registPET1_LM, filename=save_register + "PET_LungCrop_Register_v1.nii.gz")
-			save_nifti_without_header(registPET2_LM, filename=save_register + "PET_LungCrop_Register_v2.nii.gz")
+			save_nifti_without_header(registCT1_LM, filename=save_root + "LDCT_LungCrop_Register_v1.nii.gz")
+			save_nifti_without_header(registCT2_LM, filename=save_root + "LDCT_LungCrop_Register_v2.nii.gz")
+			save_nifti_without_header(registPET1_LM, filename=save_root + "PET_LungCrop_Register_v1.nii.gz")
+			save_nifti_without_header(registPET2_LM, filename=save_root + "PET_LungCrop_Register_v2.nii.gz")
 
-			save_nifti_without_header(registCT1_Clinic, filename=save_register+"LDCT_Clinic_Register_v1.nii.gz")
-			save_nifti_without_header(registCT2_Clinic, filename=save_register+"LDCT_Clinic_Register_v2.nii.gz")
-			save_nifti_without_header(registPET1_Clinic, filename=save_register + "PET_Clinic_Register_v1.nii.gz")
-			save_nifti_without_header(registPET2_Clinic, filename=save_register + "PET_Clinic_Register_v2.nii.gz")
+			save_nifti_without_header(registCT1_Clinic, filename=save_root+"LDCT_Clinic_Register_v1.nii.gz")
+			save_nifti_without_header(registCT2_Clinic, filename=save_root+"LDCT_Clinic_Register_v2.nii.gz")
+			save_nifti_without_header(registPET1_Clinic, filename=save_root + "PET_Clinic_Register_v1.nii.gz")
+			save_nifti_without_header(registPET2_Clinic, filename=save_root + "PET_Clinic_Register_v2.nii.gz")
 
 		return 0
-	if len(intermediate_dict)==1 and len(registered_dict)==1:
-		print("Patient Already with Registered Images")
-		metrics_bool = False
-		if metrics_bool:
-			pet_clinic_binary = BinaryPET(registPET2_Clinic)
-			pet_LungCrop_binary = BinaryPET(registPET2_LM)
 
-			dice_Clinic, haus_Clinic = metrics_fun_v1(torch.from_numpy(pet_clinic_binary), ITV_Clinic_tensor[0])
-			dice_LungCrop, haus_LungCrop = metrics_fun_v1(torch.from_numpy(pet_LungCrop_binary), ITV_LungCrop_tensor[0])
-		return 0
-	if len(data_dicts)==0:
+	else:
 		print("Missing Images Patient")
 		return 1
+
+
+if __name__ == "__main__":
+
+	device_cuda = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+	print('device:', device_cuda)
+
+	#nifti_root = "/home/umcg/Desktop/Ch2/Data/Registration5/"
+	#clinicInfo_path = os.path.join(nifti_root,"CollectedwClinicalInfo.csv")
+
+	nifti_root  = "//zkh/appdata/RTDicom/DAMEproject/new_DicomData_Nifti/"
+	clinicInfo_path = "C:/Users/delaOArevaLR/OneDrive - UMCG/Code/Code_From_Umcg/RegistrationCode/CollectedwClinicalInfo.csv"
+	save_newFolder = "//zkh/appdata/RTDicom/DAMEproject/new_DicomData_Nifti_reshaped/"
+
+	id_column = clinicInfo_idcolumn(clinicInfo_path)
+
+	total_px = []
+	for patientID in id_column:
+		print(patientID)
+		pxok = main(nifti_root,clinicInfo_path,patientID,device_cuda,save_newFolder)
+		total_px.append(pxok)
+	print("THE END")
+	

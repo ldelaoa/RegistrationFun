@@ -8,6 +8,7 @@ from display_LoadImgs_fun import *
 
 def cropCTfromROI_ClinicalInfo_v2(image,mask,clinicInfo_path,patientID):
     side_value, upper_value = clinicInfo_values(clinicInfo_path, patientID)
+    print("Clinical Info:",side_value,upper_value)
     side_image,side_mask = Side_Crop(image,mask,side_value)
     upper_image,upper_mask = Upper_Crop(side_image,side_mask,upper_value)
     return upper_image,upper_mask
@@ -26,7 +27,7 @@ def cropCTfromROI_ClinicalInfo_DEPRECATED(plan_ct,plan_ct_LM,itv,clinicInfo_path
     
     side_value,upper_value = clinicInfo_values(clinicInfo_path,patientID)
 
-    print(side_value,upper_value)
+    print("Clinical Info:",side_value,upper_value)
     #Crop 
     side_crop,side_coords = Side_Crop(plan_ct_LM,side_value)
     upper_crop,upper_coords = Upper_Crop(side_crop,upper_value)
