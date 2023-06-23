@@ -33,8 +33,6 @@ def FilesPerPatient_Registered(file_path):
                 petLung_v1.append(os.path.join(file_path,f))
             if ("PET" in f) and "Lung" in f and "v2" in f:
                 petLung_v2.append(os.path.join(file_path,f))
-            
-
 
     data_dicts = [
         {"ldctClinic_v1":ldctClinic_v1_name,"ldctClinic_v2":ldctClinic_v2_name,"ldctLung_v1":ldctLung_v1_name,"ldctLung_v2":ldctLung_v2_name,
@@ -133,8 +131,6 @@ def FilesperPatient_Inter_LungCroped(file_path):
 
             if ("ITV" in f) and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 itv_clinic.append(os.path.join(file_path, f))
-
-
 
     data_dicts_intermediate = [{"PlanCT_LungCrop": planct_LungCrop_name,"ITV_LungCrop":itv_LungCrop_name,"PlanCT_LungMask_LungCrop":planCT_LM_LungCrop_name,
                                 "LDCT_LungCrop": ldct_LungCrop_name,"PET_LungCrop":pet_LungCrop_name,"LDCT_LungMask_LungCrop":LDCT_LM_LungCrop_name,

@@ -3,6 +3,7 @@ import numpy as np
 
 
 def BinaryPET(pet_cropped_1):
+    pet_cropped_1 = pet_cropped_1.numpy()
     local_otsu = threshold_multiotsu(pet_cropped_1, classes=3)
     otsu_lvl0 = local_otsu[0]
     otsu_lvl1 = local_otsu[1]

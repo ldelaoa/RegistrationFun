@@ -1,6 +1,26 @@
 import SimpleITK as sitk
 import numpy as np
 import os
+import math
+
+
+def RotationScale(transform):
+    parameters = transform.GetParameters()
+    rotationX = parameters[0]
+    rotationY = parameters[1]
+    rotationZ = parameters[2]
+    rotationXDegrees = rotationX * 180.0 / math.pi
+    rotationYDegrees = rotationY * 180.0 / math.pi
+    rotationZDegrees = rotationZ * 180.0 / math.pi
+    rotationList = [rotationXDegrees, rotationYDegrees, rotationZDegrees]
+
+    components = transform.GetNthTransform(0).GetMatrix()
+    matrix = np.array(components).reshape(3, 3)
+    eigenvalues, eigenvectors = np.linalg.eig(matrix)
+
+    real_eigenvalues = np.real(eigenvectors)
+
+    return real_eigenvalues[0], real_eigenvalues[1], real_eigenvalues[2], rotationList[0], rotationList[1],rotationList[2]
 
 
 def Register_fun_v2(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
@@ -24,9 +44,9 @@ def Register_fun_v2(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
 
     final_transform = registration_method.Execute(fixed_image, moving_image)
     evaluationMetric = registration_method.GetMetricValue()
-    print(f"Final metric value for patient {patient_number}: {evaluationMetric}")
-    print(f"Optimizer's stopping condition for patient {patient_number}: {registration_method.GetOptimizerStopConditionDescription()}")
-    print(f"Iteration for patient {patient_number}: {registration_method.GetOptimizerIteration()}")
+    #print(f"Final metric value for patient {patient_number}: {evaluationMetric}")
+    #print(f"Optimizer's stopping condition for patient {patient_number}: {registration_method.GetOptimizerStopConditionDescription()}")
+    #print(f"Iteration for patient {patient_number}: {registration_method.GetOptimizerIteration()}")
     moving_resampled = sitk.Resample(moving_image, fixed_image, final_transform, sitk.sitkLinear, 0.0, moving_image.GetPixelID())
 
     # Save the registered low-dose CT and PET
@@ -45,7 +65,9 @@ def Register_fun_v2(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
     ldct_registered_np = sitk.GetArrayFromImage(moving_resampled)
     pet_registered_np = sitk.GetArrayFromImage(registered_pet_image)
 
-    return ldct_registered_np,pet_registered_np,evaluationMetric
+    sX,sY,sZ,rX,rY,rZ = RotationScale(final_transform)
+
+    return ldct_registered_np,pet_registered_np,evaluationMetric,sX,sY,sZ,rX,rY,rZ
 
 
 def Register_fun_v3(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
@@ -69,9 +91,9 @@ def Register_fun_v3(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
 
     final_transform = registration_method.Execute(fixed_image, moving_image)
     evaluationMetric = registration_method.GetMetricValue()
-    print(f"Final metric value for patient {patient_number}: {evaluationMetric}")
-    print(f"Optimizer's stopping condition for patient {patient_number}: {registration_method.GetOptimizerStopConditionDescription()}")
-    print(f"Iteration for patient {patient_number}: {registration_method.GetOptimizerIteration()}")
+    #print(f"Final metric value for patient {patient_number}: {evaluationMetric}")
+    #print(f"Optimizer's stopping condition for patient {patient_number}: {registration_method.GetOptimizerStopConditionDescription()}")
+    #print(f"Iteration for patient {patient_number}: {registration_method.GetOptimizerIteration()}")
     moving_resampled = sitk.Resample(moving_image, fixed_image, final_transform, sitk.sitkLinear, 0.0, moving_image.GetPixelID())
 
     # Save the registered low-dose CT and PET
@@ -90,4 +112,10 @@ def Register_fun_v3(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
     ldct_registered_np = sitk.GetArrayFromImage(moving_resampled)
     pet_registered_np = sitk.GetArrayFromImage(registered_pet_image)
 
-    return ldct_registered_np,pet_registered_np,evaluationMetric
+    sX,sY,sZ,rX,rY,rZ = RotationScale(final_transform)
+
+
+    return ldct_registered_np,pet_registered_np,evaluationMetric,sX,sY,sZ,rX,rY,rZ
+
+
+

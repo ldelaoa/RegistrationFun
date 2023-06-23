@@ -25,9 +25,9 @@ def OnlyRead_registered(dictionary,ClinicorLungbool):
     image_keys_lungCrop = ["ldctLung_v1","ldctLung_v2","petLung_v1","petLung_v2"]
     image_keys_Clinic = ["ldctClinic_v1","ldctClinic_v2","petClinic_v1","petClinic_v2"]
     if ClinicorLungbool:
-        image_keys = image_keys_Clinic
-    else:
         image_keys = image_keys_lungCrop
+    else:
+        image_keys = image_keys_Clinic
 
     load_transforms = Compose(
         [LoadImaged(keys=image_keys),EnsureChannelFirstd(keys=image_keys),])
