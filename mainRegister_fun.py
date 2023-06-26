@@ -34,7 +34,7 @@ from similarityMetrics_fun import *
 import torch
 
 
-def mainRegister(save_register,intermediate_dict,pxID):
+def mainRegister(save_register,intermediate_dict,pxID,save_CSVs):
     print("Inside Registration module")
     PlanCT_LungCrop_tensor,ITV_LungCrop_tensor,PlanCT_LungMask_LungCrop_tensor,LDCT_LungCrop_tensor,PET_LungCrop_tensor,LDCT_LungMask_LungCrop_tensor = OnlyRead_Intermediate(intermediate_dict, True, False)
 
@@ -58,7 +58,7 @@ def mainRegister(save_register,intermediate_dict,pxID):
 
     cropOk = torch.sum(ITV_LungCrop_tensor) - torch.sum(ITV_Clinic_tensor)
 
-    tmp_path = save_register+"Cropping_metrics.csv"
+    tmp_path = save_CSVs+"Cropping_metrics.csv"
     with open(tmp_path, "a", newline="") as file_tmp:
         writer = csv.writer(file_tmp)
         writer.writerow(([pxID,cropOk]))

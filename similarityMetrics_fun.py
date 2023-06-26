@@ -13,8 +13,12 @@ def similarMetrics(img1,img2,itv):
             psnr = psnr + metrics.peak_signal_noise_ratio(img1[:,:,i], img2[:,:,i],data_range=img2[:,:,i].max() - img2[:,:,i].min())
 
             count += 1
+    if count > 0 : 
+        mse_avg = mse/count
+        ssim_avg = ssim/count
+        psnr_avg = psnr/count
+        return mse_avg,ssim_avg,psnr_avg
+    else:
+        return 0,0,0
 
-    mse_avg = mse/count
-    ssim_avg = ssim/count
-    psnr_avg = psnr/count
-    return mse_avg,ssim_avg,psnr_avg
+    
