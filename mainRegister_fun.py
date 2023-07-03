@@ -58,11 +58,7 @@ def mainRegister(save_register,intermediate_dict,pxID,save_CSVs):
 
     cropOk = torch.sum(ITV_LungCrop_tensor) - torch.sum(ITV_Clinic_tensor)
 
-    tmp_path = save_CSVs+"Cropping_metrics.csv"
+    tmp_path = save_CSVs+"Cropping_metrics_v2.csv"
     with open(tmp_path, "a", newline="") as file_tmp:
         writer = csv.writer(file_tmp)
-        writer.writerow(([pxID,cropOk]))
-        writer.writerow(([eval1_LM,sX_LM1,sY_LM1,sZ_LM1,rX_LM1,rY_LM1,rZ_LM1]))
-        writer.writerow(([eval2_LM,sX_LM2,sY_LM2,sZ_LM2,rX_LM2,rY_LM2,rZ_LM2]))
-        writer.writerow(([eval1_Clin,sX_Clin1,sY_Clin1,sZ_Clin1,rX_Clin1,rY_Clin1,rZ_Clin1]))
-        writer.writerow(([eval2_Clin,sX_Clin2,sY_Clin2,sZ_Clin2,rX_Clin2,rY_Clin2,rZ_Clin2]))
+        writer.writerow([pxID,cropOk,eval1_LM,sX_LM1,sY_LM1,sZ_LM1,rX_LM1,rY_LM1,rZ_LM1,eval2_LM,sX_LM2,sY_LM2,sZ_LM2,rX_LM2,rY_LM2,rZ_LM2,eval1_Clin,sX_Clin1,sY_Clin1,sZ_Clin1,rX_Clin1,rY_Clin1,rZ_Clin1,eval2_Clin,sX_Clin2,sY_Clin2,sZ_Clin2,rX_Clin2,rY_Clin2,rZ_Clin2])

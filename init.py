@@ -2,6 +2,7 @@ import torch
 import os
 import csv
 from main_fun import *
+from deleteFiles_fun import *
 
 
 if __name__ == "__main__":
@@ -23,13 +24,15 @@ if __name__ == "__main__":
 
 	id_column = clinicInfo_idcolumn(clinicInfo_path)
 
+	#_ = delete_files_with_word(save_Intermediate, "Clinic")
+
 	total_px = []
 	for patientID in id_column:
 		print(patientID)
 		pxok = main(nifti_root,clinicInfo_path,patientID,device_cuda,save_Intermediate,save_newRegistered,save_CSVs)
 		total_px.append(pxok)
 	
-	with open(save_CSVs+"ReviewOkPx.csv", "a", newline="") as file_tmp:
+	with open(save_CSVs+"ReviewOkPx_v2.csv", "a", newline="") as file_tmp:
 		writer = csv.writer(file_tmp)
 		writer.writerow(id_column)
 		writer.writerow(total_px)

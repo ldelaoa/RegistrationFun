@@ -33,7 +33,7 @@ from similarityMetrics_fun import *
 
 def mainEval(registered_dict,intermediate_dict,pxID,save_CSVs):
     print("Patient Already with Registered Images")
-    tmp_path = save_CSVs + "Registration_metrics.csv"
+    tmp_path = save_CSVs + "Registration_metrics_v2.csv"
 
     ldctLung_v1_t,ldctLung_v2_t,petLung_v1_t,petLung_v2_t = OnlyRead_registered(registered_dict, True)#True is Lung Crop
     PlanCT_LungCrop_tensor, ITV_LungCrop_tensor, _, _, _, _ = OnlyRead_Intermediate(intermediate_dict, True, False)
