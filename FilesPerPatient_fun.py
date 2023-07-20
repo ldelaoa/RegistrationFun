@@ -113,23 +113,25 @@ def FilesperPatient_Inter_LungCroped(file_path):
     ldct_clinic = []
     pet_clinic = []
     ldct_LM_clinic = []
+    keyword1="clinic"
+    keyword2="tumorroi"
 
     for root, dirs, files in os.walk(file_path, topdown=False):
         for f in files:
-            if "pet" in f.lower() and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if "pet" in f.lower() and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 pet_clinic.append(os.path.join(file_path, f))
-            if ("PlanCT" in f) and not ("LungMask" in f) and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if ("PlanCT" in f) and not ("LungMask" in f) and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 planct_clinic.append(os.path.join(file_path, f))
-            if ("LDCT" in f) and not ("LungMask" in f) and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if ("LDCT" in f) and not ("LungMask" in f) and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 ldct_clinic.append(os.path.join(file_path, f))
 
-            if ("planct" in f.lower()) and "LungMask" in f and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if ("planct" in f.lower()) and "LungMask" in f and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 planct_LM_clinic.append(os.path.join(file_path, f))
 
-            if ("LDCT" in f) and "LungMask" in f and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if ("LDCT" in f) and "LungMask" in f and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 ldct_LM_clinic.append(os.path.join(file_path, f))
 
-            if ("ITV" in f) and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if ("ITV" in f) and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 itv_clinic.append(os.path.join(file_path, f))
 
     data_dicts_intermediate = [{"PlanCT_LungCrop": planct_LungCrop_name,"ITV_LungCrop":itv_LungCrop_name,"PlanCT_LungMask_LungCrop":planCT_LM_LungCrop_name,

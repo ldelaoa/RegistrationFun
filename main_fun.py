@@ -32,6 +32,8 @@ from similarityMetrics_fun import *
 from mainCrop_fun import *
 from mainRegister_fun import *
 from mainEvaluation_fun import *
+from mainCrop_fun_v2 import *
+
 
 import torch
 
@@ -57,7 +59,8 @@ def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered,save_C
 
 	#Read Raw Images and Crop to Lung and Clinic Specs
 	if len(intermediate_dict)==0 and len(data_dicts)==1:
-		mainCrop(save_root,data_dicts,device,pxID,clinicInfo_path)
+		#mainCrop(save_root,data_dicts,device,pxID,clinicInfo_path)
+		mainCrop_v2(save_root,data_dicts,device,pxID,clinicInfo_path)
 		intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
 
 	#Read Lung and Clinic Cropped images and register them
