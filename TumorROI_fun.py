@@ -1,11 +1,12 @@
 import numpy as np
 import nibabel as nib
-from monai.utils import first
+from monai.utils.misc import first
 from skimage.filters import threshold_multiotsu
 from monai.transforms import (
     Compose,
     EnsureChannelFirstd,
-
+    ImageFilterd,
+    AsDiscreted,
     MapTransform,
     CropForegroundd,
 )
@@ -31,23 +32,28 @@ class BinaryPET_CropCTs(MapTransform):
         else:
             binary_pet = pet_cropped_1 > 0
             print("no uptake values found, thresh is ZERO")
-        binary_pet = binary_pet.astype(np.uint8)
-        dilatedPet = dilation(np.squeeze(binary_pet[0,0,:,:,:]), ball(8))
-        tensor_dilated_pet = binary_pet
-        tensor_dilated_pet[0,0,:,:,:] =  dilatedPet
-        dictionary["PET"] = tensor_dilated_pet
+        dictionary["PET"] = binary_pet.astype(np.uint8)
+        if False:
+            print("binary_pet Shape",binary_pet.shape)
+            binary_pet = binary_pet.astype(np.uint8)
+            dilatedPet = dilation(np.squeeze(binary_pet[0,:,:,:]), ball(8))
+            tensor_dilated_pet = binary_pet
+            tensor_dilated_pet[0,:,:,:] =  dilatedPet
+            dictionary["PET"] = tensor_dilated_pet
         return dictionary
 
 def TumorROI_fun(imagePET,imageLDCT,imagePlanCT,imageITV,device):
     pictionary = [
-        {"PET": imagePET_name, "PlanCT": imagePlanCT_name,"LDCT":imageLDCT_name,"ITV":imageITV_name}
-        for imagePET_name, imagePlanCT_name,imageLDCT_name,imageITV_name in zip([imagePET], [imagePlanCT],[imageLDCT],[imageITV])
+        {"PET": imagePET_name, "PlanCT": imagePlanCT_name,"LDCT":imageLDCT_name,"ITV":imageITV_name,"BinaryPET":imageBinaryPet_name}
+        for imagePET_name, imagePlanCT_name,imageLDCT_name,imageITV_name,imageBinaryPet_name in zip([imagePET], [imagePlanCT],[imageLDCT],[imageITV],[imagePET])
     ]
-
+    
     resample_transforms = Compose([
-        EnsureChannelFirstd(keys=["PET","PlanCT","LDCT","ITV"]),
-        BinaryPET_CropCTs(keys="PET"),
-        CropForegroundd(keys=["PET","PlanCT","LDCT","ITV"],source_key="PET",k_divisible = 96),
+        #EnsureChannelFirstd(keys=["PET","PlanCT","LDCT","ITV","BinaryPET"]),
+        #BinaryPET_CropCTs(keys="BinaryPET"),
+        AsDiscreted(keys="BinaryPET",to_onehot=None,treshold=10),
+        ImageFilterd(keys="BinaryPET",kernel="elliptical",kernel_size=3),
+        CropForegroundd(keys=["PET","PlanCT","LDCT","ITV"],source_key="BinaryPET",k_divisible = 96),
     ])
     check_ds = Dataset(data=pictionary, transform=resample_transforms)
     check_loader = DataLoader(check_ds, batch_size=1, num_workers=0)

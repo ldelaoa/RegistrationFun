@@ -75,10 +75,10 @@ def mainCrop_v2(save_root,data_dicts,device,pxID,clinicInfo_path):
     print("Moving Clinic shapes:", LDCT_TumorRoi.shape, PET_TumorRoi.shape)
 
     if True:
-        save_nifti_without_header(PET_TumorRoi[0].numpy(), filename=save_root + "PET_TumorROI.nii.gz")
-        save_nifti_without_header(LDCT_TumorRoi[0].numpy(), filename=save_root + "LDCT_TumorROI.nii.gz")
-        save_nifti_without_header(PlanCT_TumorRoi[0].numpy(), filename=save_root + "PlanCT_TumorROI.nii.gz")
-        save_nifti_without_header(ITV_TumorRoi[0].numpy(), filename=save_root + "ITV_TumorROI.nii.gz")
+        save_nifti_without_header(PET_TumorRoi[0].detach().cpu().numpy(), filename=save_root + "PET_TumorROI.nii.gz")
+        save_nifti_without_header(LDCT_TumorRoi[0].detach().cpu().numpy(), filename=save_root + "LDCT_TumorROI.nii.gz")
+        save_nifti_without_header(PlanCT_TumorRoi[0].detach().cpu().numpy(), filename=save_root + "PlanCT_TumorROI.nii.gz")
+        save_nifti_without_header(ITV_TumorRoi[0].detach().cpu().numpy(), filename=save_root + "ITV_TumorROI.nii.gz")
 
 
 
