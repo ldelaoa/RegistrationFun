@@ -2,6 +2,7 @@ from skimage.filters import threshold_multiotsu
 import numpy as np
 
 
+
 def BinaryPET(pet_cropped_1):
     pet_cropped_1 = pet_cropped_1.numpy()
     unique_val = np.unique(pet_cropped_1)
