@@ -66,13 +66,15 @@ def mainCrop_v2(save_root,data_dicts,device,pxID,clinicInfo_path):
         save_nifti_without_header(planctLM_clinic[0].numpy(), filename=save_root + "PlanCT_Clinic_LungMask.nii.gz")
         save_nifti_without_header(itv_clinic[0].numpy(), filename=save_root + "ITV_Clinic_.nii.gz")
 
-    PET_TumorRoi,LDCT_TumorRoi,PlanCT_TumorRoi,ITV_TumorRoi,PlanCTLM_TumorRoi,LDCTLM_TumorRoi = TumorROI_fun(PET_spaced,LDCT_spaced,planCT_spaced,itv_spaced,planCTLM_spaced,LDCT_LM_spaced,device)
+    PET_TumorRoi,LDCT_TumorRoi,PlanCT_TumorRoi,ITV_TumorRoi,PlanCTLM_TumorRoi,LDCTLM_TumorRoi,BinaryPET_TumorRoi = TumorROI_fun(PET_spaced,LDCT_spaced,planCT_spaced,itv_spaced,planCTLM_spaced,LDCT_LM_spaced,device)
 
     print("Target Lung Cropped shapes:", planCT_spaced.shape, planCTLM_spaced.shape, itv_spaced.shape)
     print("Moving Lung Cropped shapes:", LDCT_spaced.shape, LDCT_LM_spaced.shape, PET_spaced.shape)
 
     print("Target Clinic shapes:", ITV_TumorRoi.shape, PlanCT_TumorRoi.shape)
     print("Moving Clinic shapes:", LDCT_TumorRoi.shape, PET_TumorRoi.shape)
+
+    display_LoadImgs(BinaryPET_TumorRoi[0].numpy(), LDCTLM_TumorRoi[0].numpy())
 
     if True:
         save_nifti_without_header(PET_TumorRoi[0].detach().cpu().numpy(), filename=save_root + "PET_TumorROI.nii.gz")
