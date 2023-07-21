@@ -58,7 +58,7 @@ def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered,save_C
 		return 1
 
 	#Read Raw Images and Crop to Lung and Clinic Specs
-	if len(intermediate_dict)==0 and len(data_dicts)==1:
+	if True:#len(intermediate_dict)==0 and len(data_dicts)==1:
 		#mainCrop(save_root,data_dicts,device,pxID,clinicInfo_path)
 		mainCrop_v2(save_root,data_dicts,device,pxID,clinicInfo_path)
 		intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)

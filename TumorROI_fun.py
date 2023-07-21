@@ -9,6 +9,8 @@ from monai.transforms import (
     AsDiscreted,
     MapTransform,
     CropForegroundd,
+    SqueezeDimd,
+    ToTensord,
 )
 from monai.data import DataLoader, Dataset
 from skimage.morphology import dilation
@@ -42,18 +44,23 @@ class BinaryPET_CropCTs(MapTransform):
             dictionary["PET"] = tensor_dilated_pet
         return dictionary
 
-def TumorROI_fun(imagePET,imageLDCT,imagePlanCT,imageITV,device):
+
+def TumorROI_fun(imagePET,imageLDCT,imagePlanCT,imageITV,planCT_LM,LDCT_LM,device):
     pictionary = [
-        {"PET": imagePET_name, "PlanCT": imagePlanCT_name,"LDCT":imageLDCT_name,"ITV":imageITV_name,"BinaryPET":imageBinaryPet_name}
-        for imagePET_name, imagePlanCT_name,imageLDCT_name,imageITV_name,imageBinaryPet_name in zip([imagePET], [imagePlanCT],[imageLDCT],[imageITV],[imagePET])
+        {"PET": imagePET_name, "PlanCT": imagePlanCT_name,"LDCT":imageLDCT_name,"ITV":imageITV_name,"BinaryPET":imageBinaryPet_name,"PlanCT_LM":imagePlanCTLM_name,"LDCT_LM":imageLDCTLM_name}
+        for imagePET_name, imagePlanCT_name,imageLDCT_name,imageITV_name,imageBinaryPet_name,imagePlanCTLM_name,imageLDCTLM_name in zip([imagePET], [imagePlanCT],[imageLDCT],[imageITV],[imagePET],[planCT_LM],[LDCT_LM])
     ]
-    
+
     resample_transforms = Compose([
-        #EnsureChannelFirstd(keys=["PET","PlanCT","LDCT","ITV","BinaryPET"]),
         #BinaryPET_CropCTs(keys="BinaryPET"),
-        AsDiscreted(keys="BinaryPET",to_onehot=None,treshold=10),
+        EnsureChannelFirstd(keys=["PET", "PlanCT", "LDCT", "ITV", "PlanCT_LM", "LDCT_LM","BinaryPET"]),
+        SqueezeDimd(keys=["PET", "PlanCT", "LDCT", "ITV", "PlanCT_LM", "LDCT_LM","BinaryPET"]),
+        AsDiscreted(keys="BinaryPET",to_onehot=None,treshold=18),
         ImageFilterd(keys="BinaryPET",kernel="elliptical",kernel_size=3),
-        CropForegroundd(keys=["PET","PlanCT","LDCT","ITV"],source_key="BinaryPET",k_divisible = 96),
+        CropForegroundd(keys=["PET","PlanCT","LDCT","ITV","PlanCT_LM","LDCT_LM"],source_key="BinaryPET",k_divisible = 96),
+        #ToTensord(keys=["PET","PlanCT","LDCT","ITV","PlanCT_LM","LDCT_LM"]),
+        SqueezeDimd(keys=["PET", "PlanCT", "LDCT", "ITV", "PlanCT_LM", "LDCT_LM"]),
+
     ])
     check_ds = Dataset(data=pictionary, transform=resample_transforms)
     check_loader = DataLoader(check_ds, batch_size=1, num_workers=0)
@@ -62,5 +69,7 @@ def TumorROI_fun(imagePET,imageLDCT,imagePlanCT,imageITV,device):
     LDCT_TumorRoi = batch_data["LDCT"].to(device)
     PlanCT_TumorRoi = batch_data["PlanCT"].to(device)
     ITV_TumorRoi = batch_data["ITV"].to(device)
-
-    return PET_TumorRoi,LDCT_TumorRoi,PlanCT_TumorRoi,ITV_TumorRoi
+    PlanCTLM_TumorRoi = batch_data["PlanCT_LM"].to(device)
+    LDCTLM_TumorRoi = batch_data["LDCT_LM"].to(device)
+    print("Shape Tumor ROI",PET_TumorRoi.detach().cpu().numpy().shape)
+    return PET_TumorRoi,LDCT_TumorRoi,PlanCT_TumorRoi,ITV_TumorRoi,PlanCTLM_TumorRoi,LDCTLM_TumorRoi

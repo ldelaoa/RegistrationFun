@@ -77,8 +77,10 @@ def Register_fun_v3(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
     lowdose_ct = sitk.GetImageFromArray(lowdose_ct_np)
 
     # Register the low-dose CT to the planning CT
-    fixed_image = sitk.Cast(planning_ct, sitk.sitkFloat32)
-    moving_image = sitk.Cast(lowdose_ct, sitk.sitkFloat32)
+    #fixed_image = sitk.Cast(planning_ct, sitk.sitkFloat32)
+    fixed_image = planning_ct
+    #moving_image = sitk.Cast(lowdose_ct, sitk.sitkFloat32)
+    moving_image = lowdose_ct
     initial_transform = sitk.CenteredTransformInitializer(fixed_image, moving_image, sitk.ScaleVersor3DTransform(), sitk.CenteredTransformInitializerFilter.GEOMETRY)
     registration_method = sitk.ImageRegistrationMethod()
     registration_method.SetMetricAsMeanSquares()

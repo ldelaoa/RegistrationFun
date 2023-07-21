@@ -66,7 +66,7 @@ def mainCrop_v2(save_root,data_dicts,device,pxID,clinicInfo_path):
         save_nifti_without_header(planctLM_clinic[0].numpy(), filename=save_root + "PlanCT_Clinic_LungMask.nii.gz")
         save_nifti_without_header(itv_clinic[0].numpy(), filename=save_root + "ITV_Clinic_.nii.gz")
 
-    PET_TumorRoi,LDCT_TumorRoi,PlanCT_TumorRoi,ITV_TumorRoi = TumorROI_fun(PET_spaced,LDCT_spaced,planCT_spaced,itv_spaced,device)
+    PET_TumorRoi,LDCT_TumorRoi,PlanCT_TumorRoi,ITV_TumorRoi,PlanCTLM_TumorRoi,LDCTLM_TumorRoi = TumorROI_fun(PET_spaced,LDCT_spaced,planCT_spaced,itv_spaced,planCTLM_spaced,LDCT_LM_spaced,device)
 
     print("Target Lung Cropped shapes:", planCT_spaced.shape, planCTLM_spaced.shape, itv_spaced.shape)
     print("Moving Lung Cropped shapes:", LDCT_spaced.shape, LDCT_LM_spaced.shape, PET_spaced.shape)
@@ -79,6 +79,8 @@ def mainCrop_v2(save_root,data_dicts,device,pxID,clinicInfo_path):
         save_nifti_without_header(LDCT_TumorRoi[0].detach().cpu().numpy(), filename=save_root + "LDCT_TumorROI.nii.gz")
         save_nifti_without_header(PlanCT_TumorRoi[0].detach().cpu().numpy(), filename=save_root + "PlanCT_TumorROI.nii.gz")
         save_nifti_without_header(ITV_TumorRoi[0].detach().cpu().numpy(), filename=save_root + "ITV_TumorROI.nii.gz")
+        save_nifti_without_header(PlanCTLM_TumorRoi[0].detach().cpu().numpy(), filename=save_root + "PlanCT_LungMask_TumorROI.nii.gz")
+        save_nifti_without_header(LDCTLM_TumorRoi[0].detach().cpu().numpy(), filename=save_root + "LDCT_LungMask_TumorROI.nii.gz")
 
 
 
