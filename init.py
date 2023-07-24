@@ -31,7 +31,7 @@ if __name__ == "__main__":
 		pxok = main(nifti_root,clinicInfo_path,patientID,device_cuda,save_Intermediate,save_newRegistered,save_CSVs)
 		total_px.append(pxok)
 	
-	with open(save_CSVs+"ReviewOkPx_v2.csv", "a", newline="") as file_tmp:
+	with open(save_CSVs+"ReviewOkPx_v3.csv", "a", newline="") as file_tmp:
 		writer = csv.writer(file_tmp)
 		writer.writerow(id_column)
 		writer.writerow(total_px)
