@@ -7,7 +7,7 @@ from CreateLungMasks_fun import *
 from display_LoadImgs_fun import *
 from ReadAndResample_fun import *
 from ReadAndResample_fun import OnlyRead_Intermediate
-from cropCTfromROI_lung_fun import *s
+from cropCTfromROI_lung_fun import *
 from cropCTfromROI_ClinicalInfo_fun import *
 from cropCTfromROI_BinaryPET_fun import *
 from Register_fun import *
