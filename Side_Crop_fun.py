@@ -14,7 +14,7 @@ def Side_Crop(image,mask,key):
         areaLung = np.copy(mask)
         print(np.unique(areaLung.flatten()))
         areaLung[areaLung>1] = 0
-    elif key =="Both" or key =="Unknown":
+    elif key =="Both" or key =="Unknown" or key == "Bilateral":
         areaLung = np.copy(mask)
         areaLung[areaLung==2] = 1
     elif key =="Mediastinum" or key =="Mediastinal":

@@ -32,11 +32,13 @@ from similarityMetrics_fun import *
 from mainCrop_fun import *
 from mainRegister_fun import *
 from mainEvaluation_fun import *
+from mainCrop_fun_v2 import *
+
 
 import torch
 
 
-def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered):
+def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered,save_CSVs):
 	file_path = os.path.join(nifti_root,str(pxID))
 	save_root = save_path+str(pxID)+"/"
 	if not os.path.exists(save_root):
@@ -44,6 +46,8 @@ def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered):
 	save_register = save_Registered+str(pxID)+"/"
 	if not os.path.exists(save_register):
 		os.makedirs(save_register)
+	
+	#Create and look for Dictionaries of raw nifti, cropped and registered
 	planCT_path,ldct_path,data_dicts= FilesPerPatient(file_path)
 	intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
 	registered_dict = FilesPerPatient_Registered(save_register)
@@ -58,15 +62,16 @@ def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered):
 	#Read Raw Images and Crop to Lung and Clinic Specs
 	if len(intermediate_dict)==0 and len(data_dicts)==1:
 		mainCrop(save_root,data_dicts,device,pxID,clinicInfo_path)
+		#mainCrop_v2(save_root,data_dicts,device,pxID,clinicInfo_path)
 		intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
 
 	#Read Lung and Clinic Cropped images and register them
 	if len(intermediate_dict)==1 and len(registered_dict)==0:
-		mainRegister(save_register, intermediate_dict, pxID)
+		mainRegister(save_register, intermediate_dict, pxID,save_CSVs)
 		registered_dict = FilesPerPatient_Registered(save_register)
 
 	#Evaluate Registration specifically in the ITV area
 	if len(intermediate_dict)==1 and len(registered_dict)==1:
-		mainEval(save_register, registered_dict, intermediate_dict, pxID)
+		mainEval(registered_dict, intermediate_dict, pxID,save_CSVs)
 
 	return 0

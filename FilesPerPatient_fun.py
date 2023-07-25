@@ -4,41 +4,42 @@ import numpy as np
 
 
 def FilesPerPatient_Registered(file_path):
-    ldctClinic_v1 =[]
+    #ldctClinic_v1 =[]
     ldctClinic_v2 =[]
-    ldctLung_v1 = []
+    #ldctLung_v1 = []
     ldctLung_v2 = []
-    petClinic_v1 =[]
+    #petClinic_v1 =[]
     petClinic_v2 =[]
-    petLung_v1 = []
+    #petLung_v1 = []
     petLung_v2 = []
     
 
     for root, dirs, files in os.walk(file_path, topdown=False):
         for f in files:
-            if ("LDCT" in f) and "Clinic" in f and "v1" in f:
-                ldctClinic_v1.append(os.path.join(file_path,f))
+            #if ("LDCT" in f) and "Clinic" in f and "v1" in f:
+            #    ldctClinic_v1.append(os.path.join(file_path,f))
             if ("LDCT" in f) and "Clinic" in f and "v2" in f:
                 ldctClinic_v2.append(os.path.join(file_path,f))
-            if ("LDCT" in f) and "Lung" in f and "v1" in f:
-                ldctLung_v1.append(os.path.join(file_path,f))
+            #if ("LDCT" in f) and "Lung" in f and "v1" in f:
+            #    ldctLung_v1.append(os.path.join(file_path,f))
             if ("LDCT" in f) and "Lung" in f and "v2" in f:
                 ldctLung_v2.append(os.path.join(file_path,f))
             
-            if ("PET" in f) and "Clinic" in f and "v1" in f:
-                petClinic_v1.append(os.path.join(file_path,f))
+            #if ("PET" in f) and "Clinic" in f and "v1" in f:
+            #    petClinic_v1.append(os.path.join(file_path,f))
             if ("PET" in f) and "Clinic" in f and "v2" in f:
                 petClinic_v2.append(os.path.join(file_path,f))
-            if ("PET" in f) and "Lung" in f and "v1" in f:
-                petLung_v1.append(os.path.join(file_path,f))
+            #if ("PET" in f) and "Lung" in f and "v1" in f:
+            #    petLung_v1.append(os.path.join(file_path,f))
             if ("PET" in f) and "Lung" in f and "v2" in f:
                 petLung_v2.append(os.path.join(file_path,f))
 
     data_dicts = [
-        {"ldctClinic_v1":ldctClinic_v1_name,"ldctClinic_v2":ldctClinic_v2_name,"ldctLung_v1":ldctLung_v1_name,"ldctLung_v2":ldctLung_v2_name,
-         "petClinic_v1":petClinic_v1_name,"petClinic_v2":petClinic_v2_name,"petLung_v1":petLung_v1_name,"petLung_v2":petLung_v2_name}
-        for ldctClinic_v1_name,ldctClinic_v2_name,ldctLung_v1_name,ldctLung_v2_name,petClinic_v1_name,petClinic_v2_name,petLung_v1_name,petLung_v2_name
-          in zip(ldctClinic_v1,ldctClinic_v2,ldctLung_v1,ldctLung_v2,petClinic_v1,petClinic_v2,petLung_v1,petLung_v2)]
+        {"ldctClinic_v2":ldctClinic_v2_name,"ldctLung_v2":ldctLung_v2_name,
+         "petClinic_v2":petClinic_v2_name,"petLung_v2":petLung_v2_name}
+        for ldctClinic_v2_name,ldctLung_v2_name,petClinic_v2_name,petLung_v2_name
+        in zip(ldctClinic_v2,ldctLung_v2, petClinic_v2, petLung_v2)]
+          #in zip(ldctClinic_v1,ldctClinic_v2,ldctLung_v1,ldctLung_v2,petClinic_v1,petClinic_v2,petLung_v1,petLung_v2)]
 
     return data_dicts
 
@@ -113,23 +114,25 @@ def FilesperPatient_Inter_LungCroped(file_path):
     ldct_clinic = []
     pet_clinic = []
     ldct_LM_clinic = []
+    keyword1="clinic"
+    keyword2="tumorroi"
 
     for root, dirs, files in os.walk(file_path, topdown=False):
         for f in files:
-            if "pet" in f.lower() and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if "pet" in f.lower() and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 pet_clinic.append(os.path.join(file_path, f))
-            if ("PlanCT" in f) and not ("LungMask" in f) and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if ("PlanCT" in f) and not ("LungMask" in f) and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 planct_clinic.append(os.path.join(file_path, f))
-            if ("LDCT" in f) and not ("LungMask" in f) and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if ("LDCT" in f) and not ("LungMask" in f) and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 ldct_clinic.append(os.path.join(file_path, f))
 
-            if ("planct" in f.lower()) and "LungMask" in f and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if ("planct" in f.lower()) and "LungMask" in f and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 planct_LM_clinic.append(os.path.join(file_path, f))
 
-            if ("LDCT" in f) and "LungMask" in f and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if ("LDCT" in f) and "LungMask" in f and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 ldct_LM_clinic.append(os.path.join(file_path, f))
 
-            if ("ITV" in f) and "clinic" in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
+            if ("ITV" in f) and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
                 itv_clinic.append(os.path.join(file_path, f))
 
     data_dicts_intermediate = [{"PlanCT_LungCrop": planct_LungCrop_name,"ITV_LungCrop":itv_LungCrop_name,"PlanCT_LungMask_LungCrop":planCT_LM_LungCrop_name,

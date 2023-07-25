@@ -1,25 +1,13 @@
-#import os
-#import numpy as np
-#from os.path import join
-#from datetime import time, datetime
-#import glob
-#from skimage.draw import polygon
-#import SimpleITK as sitk
-#import pydicom as dicom
 import os.path
 import csv
-
-#import nibabel as nib
-#from skimage.filters import threshold_multiotsu
-#from nibabel.processing import resample_to_output
-#from skimage.util import crop
 
 from clinicInfo_fun import clinicInfo_idcolumn
 from FilesPerPatient_fun import *
 from CreateLungMasks_fun import *
 from display_LoadImgs_fun import *
 from ReadAndResample_fun import *
-from cropCTfromROI_lung_fun import *
+from ReadAndResample_fun import OnlyRead_Intermediate
+from cropCTfromROI_lung_fun import *s
 from cropCTfromROI_ClinicalInfo_fun import *
 from cropCTfromROI_BinaryPET_fun import *
 from Register_fun import *
@@ -31,9 +19,10 @@ from BinaryEvaluation_fun import *
 from similarityMetrics_fun import *
 
 
-def mainEval(save_register,registered_dict,intermediate_dict,pxID):
+
+def mainEval(registered_dict,intermediate_dict,pxID,save_CSVs):
     print("Patient Already with Registered Images")
-    tmp_path = save_register + "Registration_metrics.csv"
+    tmp_path = save_CSVs + "Registration_metrics_v3.csv"
 
     ldctLung_v1_t,ldctLung_v2_t,petLung_v1_t,petLung_v2_t = OnlyRead_registered(registered_dict, True)#True is Lung Crop
     PlanCT_LungCrop_tensor, ITV_LungCrop_tensor, _, _, _, _ = OnlyRead_Intermediate(intermediate_dict, True, False)

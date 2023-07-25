@@ -1,11 +1,6 @@
 import os.path
 import csv
 
-#import nibabel as nib
-#from skimage.filters import threshold_multiotsu
-#from nibabel.processing import resample_to_output
-#from skimage.util import crop
-
 from CreateLungMasks_fun import *
 from display_LoadImgs_fun import *
 from ReadAndResample_fun import *

@@ -2,12 +2,18 @@ from skimage.filters import threshold_multiotsu
 import numpy as np
 
 
+
 def BinaryPET(pet_cropped_1):
     pet_cropped_1 = pet_cropped_1.numpy()
-    local_otsu = threshold_multiotsu(pet_cropped_1, classes=3)
-    otsu_lvl0 = local_otsu[0]
-    otsu_lvl1 = local_otsu[1]
-    binary_pet = pet_cropped_1 > otsu_lvl1
+    unique_val = np.unique(pet_cropped_1)
+    classes_num=3
+    if len(unique_val) > classes_num:
+        local_otsu = threshold_multiotsu(pet_cropped_1, classes=classes_num)
+        otsu_lvl0 = local_otsu[0]
+        otsu_lvl1 = local_otsu[1]
+        binary_pet = pet_cropped_1 > otsu_lvl1
+    else:
+        binary_pet = pet_cropped_1 > 0
 
     return binary_pet
 
