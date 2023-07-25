@@ -40,15 +40,11 @@ def OnlyRead_registered(dictionary,ClinicorLungbool):
     batch_data = first(check_loader)
 
     if ClinicorLungbool:
-        #ldctLung_v1_t,ldctLung_v2_t,petLung_v1_t,petLung_v2_t = (batch_data["ldctLung_v1"],batch_data["ldctLung_v2"],batch_data["petLung_v1"],batch_data["petLung_v2"])
-        ldctLung_v2_t, petLung_v2_t = (batch_data["ldctLung_v2"],batch_data["petLung_v2"])
-        #return ldctLung_v1_t,ldctLung_v2_t,petLung_v1_t,petLung_v2_t
-        return ldctLung_v2_t, petLung_v2_t
+        ldctLung_v1_t,ldctLung_v2_t,petLung_v1_t,petLung_v2_t = (batch_data["ldctLung_v1"],batch_data["ldctLung_v2"],batch_data["petLung_v1"],batch_data["petLung_v2"])
+        return ldctLung_v1_t,ldctLung_v2_t,petLung_v1_t,petLung_v2_t
     else:
-        #ldctClinic_v1_t,ldctClinic_v2_t,petClinic_v1_t,petClinic_v2_t = (batch_data["ldctClinic_v1"],batch_data["ldctClinic_v2"],batch_data["petClinic_v1"],batch_data["petClinic_v2"])
-        ldctClinic_v2_t, petClinic_v2_t = (batch_data["ldctClinic_v2"],batch_data["petClinic_v2"])
-        return ldctClinic_v2_t, petClinic_v2_t
-        #return ldctClinic_v1_t,ldctClinic_v2_t,petClinic_v1_t,petClinic_v2_t
+        ldctClinic_v1_t,ldctClinic_v2_t,petClinic_v1_t,petClinic_v2_t = (batch_data["ldctClinic_v1"],batch_data["ldctClinic_v2"],batch_data["petClinic_v1"],batch_data["petClinic_v2"])
+        return ldctClinic_v1_t,ldctClinic_v2_t,petClinic_v1_t,petClinic_v2_t
     
 
 def OnlyRead_Intermediate(dictionary,LungCropTensors_bool,clinicTensors_bool):
