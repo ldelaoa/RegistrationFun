@@ -46,6 +46,8 @@ def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered,save_C
 	save_register = save_Registered+str(pxID)+"/"
 	if not os.path.exists(save_register):
 		os.makedirs(save_register)
+	
+	#Create and look for Dictionaries of raw nifti, cropped and registered
 	planCT_path,ldct_path,data_dicts= FilesPerPatient(file_path)
 	intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
 	registered_dict = FilesPerPatient_Registered(save_register)
@@ -59,8 +61,8 @@ def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered,save_C
 
 	#Read Raw Images and Crop to Lung and Clinic Specs
 	if len(intermediate_dict)==0 and len(data_dicts)==1:
-		#mainCrop(save_root,data_dicts,device,pxID,clinicInfo_path)
-		mainCrop_v2(save_root,data_dicts,device,pxID,clinicInfo_path)
+		mainCrop(save_root,data_dicts,device,pxID,clinicInfo_path)
+		#mainCrop_v2(save_root,data_dicts,device,pxID,clinicInfo_path)
 		intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
 
 	#Read Lung and Clinic Cropped images and register them
