@@ -17,14 +17,15 @@ def RotationScale(transform):
     components = transform.GetNthTransform(0).GetMatrix()
     matrix = np.array(components).reshape(3, 3)
     eigenvalues, eigenvectors = np.linalg.eig(matrix)
+
     real_eigenvalues = np.real(eigenvectors)
 
-
-    return real_eigenvalues[0],real_eigenvalues[1],real_eigenvalues[2],rotationList[0],rotationList[1],rotationList[2]
-
+    return real_eigenvalues[0], real_eigenvalues[1], real_eigenvalues[2], rotationList[0], rotationList[1],rotationList[2]
 
 
-def Register_fun(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
+def Register_fun_v8(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
+    #SPECS:
+    #ScaleVersor3D,Geomerty, MattesMutualInfo, RegularStepGradientDescent
 
     # Load the planning CT and low-dose CT
     planning_ct = sitk.GetImageFromArray(planning_ct_np)
@@ -33,20 +34,24 @@ def Register_fun(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
     # Register the low-dose CT to the planning CT
     fixed_image = sitk.Cast(planning_ct, sitk.sitkFloat32)
     moving_image = sitk.Cast(lowdose_ct, sitk.sitkFloat32)
-    initial_transform = sitk.CenteredTransformInitializer(fixed_image, moving_image, sitk.Euler3DTransform(), sitk.CenteredTransformInitializerFilter.GEOMETRY)
+
+    #INITIALIZE
+    initial_transform = sitk.CenteredTransformInitializer(fixed_image, moving_image, sitk.ScaleVersor3DTransform(), sitk.CenteredTransformInitializerFilter.GEOMETRY)
+
     registration_method = sitk.ImageRegistrationMethod()
+
+    #METRICS
     registration_method.SetMetricAsMattesMutualInformation(numberOfHistogramBins=100)
     registration_method.SetMetricSamplingStrategy(registration_method.RANDOM)
     registration_method.SetMetricSamplingPercentage(0.2)
-    
-    registration_method.SetInterpolator(sitk.sitkLinear)
 
-
-    registration_method.SetOptimizerAsGradientDescent(learningRate=1.0, numberOfIterations=400, convergenceMinimumValue=1e-6, convergenceWindowSize=10)
+    #OPTIMIZER
+    registration_method.SetOptimizerAsRegularStepGradientDescent(learningRate=1.0, numberOfIterations=500,minStep=0.0001,gradientMagnitudeTolerance=1e-8)
     registration_method.SetOptimizerScalesFromPhysicalShift()
+
+    #Registration
     registration_method.SetInitialTransform(initial_transform, inPlace=False)
-    
-    final_transform = registration_method.Execute(fixed_image, moving_image) 
+    final_transform = registration_method.Execute(fixed_image, moving_image)
     evaluationMetric = registration_method.GetMetricValue()
     #print(f"Final metric value for patient {patient_number}: {evaluationMetric}")
     #print(f"Optimizer's stopping condition for patient {patient_number}: {registration_method.GetOptimizerStopConditionDescription()}")
@@ -65,12 +70,10 @@ def Register_fun(planning_ct_np,lowdose_ct_np,pet_np,patient_number):
     if False:
         sitk.WriteImage(registered_pet_image, registered_pet_path)
         print(f'PET for patient {patient_number} registrated and saved.')
-    
+
     ldct_registered_np = sitk.GetArrayFromImage(moving_resampled)
     pet_registered_np = sitk.GetArrayFromImage(registered_pet_image)
 
     sX,sY,sZ,rX,rY,rZ = RotationScale(final_transform)
 
     return ldct_registered_np,pet_registered_np,evaluationMetric,sX,sY,sZ,rX,rY,rZ
-    
-

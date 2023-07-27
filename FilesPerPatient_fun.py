@@ -148,3 +148,19 @@ def FilesperPatient_Inter_LungCroped(file_path):
 
     return data_dicts_intermediate
 
+
+def FilesPerPatient_Registered_dynamic(file_path,regist_v):
+    ldctLung_v = []
+    petLung_v = []
+
+    for root, dirs, files in os.walk(file_path, topdown=False):
+        for f in files:
+            if ("LDCT" in f) and "Lung" in f and str(regist_v) in f:
+                ldctLung_v.append(os.path.join(file_path, f))
+            if ("PET" in f) and "Lung" in f and str(regist_v) in f:
+                petLung_v.append(os.path.join(file_path, f))
+    data_dicts = [
+        {"ldctLung_v": ldctLung_v_name,"petLung_v": petLung_v_name}
+        for ldctLung_v_name, petLung_v_name, in zip(ldctLung_v,petLung_v)]
+
+    return data_dicts

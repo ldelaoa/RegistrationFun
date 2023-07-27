@@ -22,7 +22,7 @@ from similarityMetrics_fun import *
 
 def mainEval(registered_dict,intermediate_dict,pxID,save_CSVs):
     print("Patient Already with Registered Images")
-    tmp_path = save_CSVs + "Registration_metrics_v3.csv"
+    tmp_path = save_CSVs + "Registration_metrics_v4.csv"
 
     ldctLung_v1_t,ldctLung_v2_t,petLung_v1_t,petLung_v2_t = OnlyRead_registered(registered_dict, True)#True is Lung Crop
     PlanCT_LungCrop_tensor, ITV_LungCrop_tensor, _, _, _, _ = OnlyRead_Intermediate(intermediate_dict, True, False)
@@ -53,3 +53,24 @@ def mainEval(registered_dict,intermediate_dict,pxID,save_CSVs):
         writer = csv.writer(file_tmp)
         writer.writerow([pxID, "ClinicCrop", "Regist1", mse_avg_11, ssim_avg_11, psnr_avg_11, dice_11, haus_11])
         writer.writerow([pxID, "ClinicCrop", "Regist2", mse_avg_22, ssim_avg_22, psnr_avg_22, dice_22, haus_22])
+
+
+def mainEval_dynamic(file_path,intermediate_dict,pxID,save_CSVs):
+    print("Patient with Registered Images")
+    tmp_path = save_CSVs + "Registration_metrics_v4.csv"
+
+    PlanCT_LungCrop_tensor, ITV_LungCrop_tensor, _, _, _, _ = OnlyRead_Intermediate(intermediate_dict, True, False)
+
+    metrics_vector=[]
+    for val0 in range(8):
+        val=val0+1
+        registered_dict = FilesPerPatient_Registered_dynamic(file_path,val)
+        ldctLung_v1_t,petLung_v1_t = OnlyRead_registered_dynamic(registered_dict,val)
+        pet_LungCrop_binary1 = BinaryPET(petLung_v1_t)
+        mse_avg_1,ssim_avg_1,psnr_avg_1 = similarMetrics(ldctLung_v1_t[0][0],PlanCT_LungCrop_tensor[0],ITV_LungCrop_tensor[0])
+        dice_1, haus_1 = metrics_fun_v1(torch.from_numpy(pet_LungCrop_binary1[0]), ITV_LungCrop_tensor)
+        metrics_vector.append([mse_avg_1, ssim_avg_1, psnr_avg_1, dice_1, haus_1])
+
+        with open(tmp_path, "a", newline="") as file_tmp:
+            writer = csv.writer(file_tmp)
+            writer.writerow([pxID, "LungCrop", "Regist"+str(val), mse_avg_1, ssim_avg_1, psnr_avg_1, dice_1, haus_1])

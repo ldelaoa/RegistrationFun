@@ -68,10 +68,9 @@ def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered,save_C
 	#Read Lung and Clinic Cropped images and register them
 	if len(intermediate_dict)==1 and len(registered_dict)==0:
 		mainRegister(save_register, intermediate_dict, pxID,save_CSVs)
-		registered_dict = FilesPerPatient_Registered(save_register)
-
+		mainEval_dynamic(save_register,intermediate_dict,pxID,save_CSVs)
 	#Evaluate Registration specifically in the ITV area
-	if len(intermediate_dict)==1 and len(registered_dict)==1:
+	if False and len(intermediate_dict)==1 and len(registered_dict)==1:
 		mainEval(registered_dict, intermediate_dict, pxID,save_CSVs)
 
 	return 0

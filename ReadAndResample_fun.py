@@ -95,3 +95,19 @@ def ReadAndOrient_monai(dictionary,device):
     PlanCT_tensor, ITV_tensor = (batch_data["PlanCT"][0][0], batch_data["ITV"][0][0])
     LDCT_tensor, PET_tensor = (batch_data["LDCT"][0][0].to(device), batch_data["PET"][0][0].to(device))
     return PlanCT_tensor,ITV_tensor,LDCT_tensor,PET_tensor
+
+
+def OnlyRead_registered_dynamic(dictionary,regist_v):
+    word_ct = "ldctLung_v"
+    word_pet = "petLung_v"
+    image_keys = [word_ct, word_pet]
+
+    load_transforms = Compose(
+        [LoadImaged(keys=image_keys,image_only=True),EnsureChannelFirstd(keys=image_keys),])
+
+    check_ds = Dataset(data=dictionary, transform=load_transforms)
+    check_loader = DataLoader(check_ds, batch_size=1, num_workers=0)
+    batch_data = first(check_loader)
+
+    ldctLung_v,petLung_v = (batch_data["ldctLung_v"],batch_data["petLung_v"])
+    return ldctLung_v,petLung_v
