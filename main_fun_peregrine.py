@@ -38,7 +38,7 @@ from mainCrop_fun_v2 import *
 import torch
 
 
-def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered,save_CSVs):
+def main_peregrine(nifti_root,pxID,device,save_path,save_Registered,save_CSVs):
 	file_path = os.path.join(nifti_root,str(pxID))
 	save_root = save_path+str(pxID)+"/"
 	if not os.path.exists(save_root):
@@ -48,29 +48,12 @@ def main(nifti_root,clinicInfo_path,pxID,device,save_path,save_Registered,save_C
 		os.makedirs(save_register)
 	
 	#Create and look for Dictionaries of raw nifti, cropped and registered
-	planCT_path,ldct_path,data_dicts= FilesPerPatient(file_path)
 	intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
-	registered_dict = FilesPerPatient_Registered(save_register)
-
-	print("Init",len(data_dicts),"Inter",len(intermediate_dict),"Regist",len(registered_dict))
-
-	#Check there is patient data, otherwise end loop
-	if len(data_dicts)==0 and len(intermediate_dict)==0 and len(registered_dict)==0:
-		print("Missing Images Patient")
-		return 1
-
-	#Read Raw Images and Crop to Lung and Clinic Specs
-	if len(intermediate_dict)==0 and len(data_dicts)==1:
-		mainCrop(save_root,data_dicts,device,pxID,clinicInfo_path)
-		#mainCrop_v2(save_root,data_dicts,device,pxID,clinicInfo_path)
-		intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
 
 	#Read Lung and Clinic Cropped images and register them
-	if len(intermediate_dict)==1 or len(registered_dict)==0:
+	if len(intermediate_dict)==1:
 		mainRegister(save_register, intermediate_dict, pxID,save_CSVs)
 		mainEval_dynamic(save_register,intermediate_dict,pxID,save_CSVs)
-	#Evaluate Registration specifically in the ITV area
-	if False and len(intermediate_dict)==1 and len(registered_dict)==1:
-		mainEval(registered_dict, intermediate_dict, pxID,save_CSVs)
+		#Evaluate Registration specifically in the ITV area
 
 	return 0
