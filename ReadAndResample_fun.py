@@ -22,10 +22,10 @@ def save_nifti_without_header(data, filename):
 
 
 def OnlyRead_registered(dictionary,ClinicorLungbool):
-    #image_keys_lungCrop = ["ldctLung_v1","ldctLung_v2","petLung_v1","petLung_v2"]
-    #image_keys_Clinic = ["ldctClinic_v1", "ldctClinic_v2", "petClinic_v1", "petClinic_v2"]
-    image_keys_lungCrop = ["ldctLung_v2", "petLung_v2"]
-    image_keys_Clinic = ["ldctClinic_v2", "petClinic_v2"]
+    image_keys_lungCrop = ["ldctLung_v1","ldctLung_v2","petLung_v1","petLung_v2"]
+    image_keys_Clinic = ["ldctClinic_v1", "ldctClinic_v2", "petClinic_v1", "petClinic_v2"]
+    #image_keys_lungCrop = ["ldctLung_v2", "petLung_v2"]
+    #image_keys_Clinic = ["ldctClinic_v2", "petClinic_v2"]
 
     if ClinicorLungbool:
         image_keys = image_keys_lungCrop
@@ -33,7 +33,7 @@ def OnlyRead_registered(dictionary,ClinicorLungbool):
         image_keys = image_keys_Clinic
 
     load_transforms = Compose(
-        [LoadImaged(keys=image_keys),EnsureChannelFirstd(keys=image_keys),])
+        [LoadImaged(keys=image_keys,image_only=True),EnsureChannelFirstd(keys=image_keys),])
 
     check_ds = Dataset(data=dictionary[:], transform=load_transforms)
     check_loader = DataLoader(check_ds, batch_size=1, num_workers=0)
@@ -56,7 +56,7 @@ def OnlyRead_Intermediate(dictionary,LungCropTensors_bool,clinicTensors_bool):
         image_keys = image_keys_lungCrop
 
     load_transforms = Compose(
-        [LoadImaged(keys=image_keys),EnsureChannelFirstd(keys=image_keys),])
+        [LoadImaged(keys=image_keys,image_only=True),EnsureChannelFirstd(keys=image_keys),])
 
     check_ds = Dataset(data=dictionary[:], transform=load_transforms)
     check_loader = DataLoader(check_ds, batch_size=1, num_workers=0)
@@ -80,7 +80,7 @@ def ReadAndOrient_monai(dictionary,device):
 
     load_transforms = Compose(
         [
-            LoadImaged(keys=image_keys),
+            LoadImaged(keys=image_keys,image_only=True),
             EnsureChannelFirstd(keys=image_keys),
             Orientationd(keys=["PlanCT", "ITV"], axcodes="LAS"), #(L', 'R'), ('P', 'A'), ('I', 'S'))
             Orientationd(keys=["LDCT","PET"], axcodes="LAS"),  # (L', 'R'), ('P', 'A'), ('I', 'S'))
