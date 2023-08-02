@@ -48,7 +48,7 @@ def main_peregrine(nifti_root,pxID,device,save_path,save_Registered,save_CSVs):
 		os.makedirs(save_register)
 	
 	#Create and look for Dictionaries of raw nifti, cropped and registered
-	intermediate_dict = FilesperPatient_Inter_LungCroped(save_root)
+	intermediate_dict = FilesperPatient_Inter_LungCroped(nifti_root+str(pxID)+"/")
 
 	#Read Lung and Clinic Cropped images and register them
 	if len(intermediate_dict)==1:

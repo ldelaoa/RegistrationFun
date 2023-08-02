@@ -74,3 +74,5 @@ def mainEval_dynamic(file_path,intermediate_dict,pxID,save_CSVs):
         with open(tmp_path, "a", newline="") as file_tmp:
             writer = csv.writer(file_tmp)
             writer.writerow([pxID, "LungCrop", "Regist"+str(val), mse_avg_1, ssim_avg_1, psnr_avg_1, dice_1, haus_1])
+    print("End Evaluation")
+    return 0

@@ -1,0 +1,807 @@
+device: cuda
+Resgistered previously 5670144
+PxID:  1495036
+Resgistered previously 1822906
+Resgistered previously 1280645
+PxID:  2069751
+Resgistered previously 2428155
+Resgistered previously 5572667
+PxID:  9854449
+PxID:  9326361
+Resgistered previously 6925717
+Resgistered previously 1818935
+PxID:  778504
+PxID:  7901414
+Resgistered previously 8343724
+Resgistered previously 6177169
+Resgistered previously 8144648
+Resgistered previously 5288807
+Resgistered previously 9613694
+Resgistered previously 8334515
+Resgistered previously 8995262
+Resgistered previously 110541
+Resgistered previously 9203990
+PxID:  6519879
+Resgistered previously 8371724
+PxID:  9061277
+Resgistered previously 2886541
+Resgistered previously 2049190
+PxID:  325073
+Resgistered previously 5068340
+Resgistered previously 9385224
+Resgistered previously 1118297
+Resgistered previously 2052538
+Resgistered previously 9780095
+Resgistered previously 6367894
+Resgistered previously 2345065
+Resgistered previously 1281715
+Resgistered previously 4961403
+Resgistered previously 775695
+Resgistered previously 9741852
+PxID:  3188894
+Resgistered previously 859643
+PxID:  248219
+Resgistered previously 1218275
+Resgistered previously 930046
+Resgistered previously 5881434
+Resgistered previously 1439985
+PxID:  9146658
+PxID:  549920
+Resgistered previously 7458863
+Resgistered previously 2602277
+Resgistered previously 3316002
+Resgistered previously 1397662
+PxID:  9698170
+PxID:  6578946
+Resgistered previously 9448726
+PxID:  2083343
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+/cvmfs/hpc.rug.nl/versions/2023.01/rocky8/x86_64/intel/skylake_avx512/software/SciPy-bundle/2022.05-foss-2022a/lib/python3.10/site-packages/numpy/lib/function_base.py:4486: RuntimeWarning: invalid value encountered in subtract
+  diff_b_a = subtract(b, a)
+End Evaluation
+PxID:  2041537
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  3853415
+PxID:  8903101
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  6857147
+PxID:  3930261
+PxID:  7846169
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  948351
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  5887068
+Inside Registration module
+Regist 1 Done
+WARNING: In /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkObjectToObjectMetric.hxx, line 575
+MeanSquaresImageToImageMetricv4 (0x39ac670): No valid points were found during metric evaluation. For image metrics, verify that the images overlap appropriately. For instance, you can align the image centers by translation. For point-set metrics, verify that the fixed points, once transformed into the virtual domain space, actually lie within the virtual domain.
+
+WARNING: In /tmp/SimpleITK-build/ITK-prefix/include/ITK-5.3/itkObjectToObjectMetric.hxx, line 575
+MeanSquaresImageToImageMetricv4 (0x39ac670): No valid points were found during metric evaluation. For image metrics, verify that the images overlap appropriately. For instance, you can align the image centers by translation. For point-set metrics, verify that the fixed points, once transformed into the virtual domain space, actually lie within the virtual domain.
+
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  32628
+PxID:  2123820
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  617349
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  523047
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9193538
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  3291227
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  7695227
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  1401248
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9521641
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  4720502
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  3558287
+PxID:  5031219
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  5160718
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9865634
+PxID:  581845
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  534518
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  5341373
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9935146
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  905985
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9363207
+PxID:  9073890
+PxID:  6449828
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  2255599
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9315678
+PxID:  5889191
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  630642
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  2410572
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  2759831
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  6932663
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9153360
+PxID:  2883136
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  3373532
+PxID:  9200209
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9593055
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  7785292
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9631914
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  4985274
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9443032
+PxID:  1539651
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  1227213
+PxID:  194140
+PxID:  8872378
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  4627572
+PxID:  3905403
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  1822090
+PxID:  7280302
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  518674
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  432375
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  8283257
+PxID:  1962700
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  100789
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  481441
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  23840
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  1349085
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9738908
+PxID:  2718130
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  8029859
+PxID:  9132538
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9118112
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  5826774
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  180869
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  1056275
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+Regist 6 Done
+Regist 7 Done
+Regist 8 Done
+Everything is saved
+Patient with Registered Images
+End Evaluation
+PxID:  9920297
+Inside Registration module
+Regist 1 Done
+Regist 2 Done
+Regist 3 Done
+Regist 4 Done
+Regist 5 Done
+slurmstepd: error: *** JOB 3311661 ON v100gpu23 CANCELLED AT 2023-08-02T11:01:21 DUE TO TIME LIMIT ***
+
+###############################################################################
+Hábrók Cluster
+Job 3311661 for user 'p308104'
+Finished at: Wed Aug  2 11:01:27 CEST 2023
+
+Job details:
+============
+
+Job ID              : 3311661
+Name                : batch_48hrs_AnyGpu.sh
+User                : p308104
+Partition           : gpulong
+Nodes               : v100gpu23
+Number of Nodes     : 1
+Cores               : 1
+Number of Tasks     : 1
+State               : TIMEOUT,CANCELLED
+Submit              : 2023-07-31T10:13:34
+Start               : 2023-07-31T10:13:36
+End                 : 2023-08-02T11:01:42
+Reserved walltime   : 2-00:48:00
+Used walltime       : 2-00:48:06
+Used CPU time       : 2-00:33:49 (efficiency: 99.51%)
+% User (Computation): 99.87%
+% System (I/O)      :  0.13%
+Mem reserved        : 80G
+Max Mem (Node/step) : 3.38G (v100gpu23, per node)
+Full Max Mem usage  : 3.38G
+Total Disk Read     : 2.25M
+Total Disk Write    : 245.66K
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Hábrók in your publications:
+
+https://wiki.hpc.rug.nl/habrok/introduction/scientific_output
+
+################################################################################
