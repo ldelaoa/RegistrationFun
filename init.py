@@ -29,11 +29,9 @@ if __name__ == "__main__":
 	save_newRegistered = "/scratch/p308104/RegistratedNii_8versions/"
 	save_CSVs = "/home1/p308104/Registration_fun/"
 	
-	registeredPx = "/home1/p308104/Registration_fun/RegisteredPatientsv4_p1.txt"
+	registeredPx = "/home1/p308104/Registration_fun/RegisteredPatientsv4_p1p2.txt"
 	ids = np.loadtxt(registeredPx, dtype=int)
 	registeredPx_list = ids.tolist()
-	
-	
 
 	#_ = delete_files_with_word(save_Intermediate, "Clinic")
 
@@ -41,12 +39,12 @@ if __name__ == "__main__":
 	for root, _, _ in os.walk(nifti_root, topdown=False):
 		patientID = root.split("/")[-1]
 		if int(patientID) in registeredPx_list:
-			print("Resgistered previously",patientID)
-			total_px.append(0)
-		else:
 			print("PxID: ",patientID)
 			pxok = main_peregrine(nifti_root,patientID,device_cuda,save_Intermediate,save_newRegistered,save_CSVs)
 			total_px.append(pxok)
+		else:
+			print("NOT Resgistered previously, We are now jus comparing  v 9 10 11 w 1-8 ", patientID)
+			total_px.append(0)
 	if False:
 		with open(save_CSVs+"ReviewOkPx_v4.csv", "a", newline="") as file_tmp:
 			writer = csv.writer(file_tmp)
