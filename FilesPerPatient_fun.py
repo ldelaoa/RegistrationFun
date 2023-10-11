@@ -88,7 +88,6 @@ def FilesperPatient_Inter_LungCroped(file_path):
     pet_path = []
     ldct_LM_path = []
 
-    # print(file_path)
     for root, dirs, files in os.walk(file_path, topdown=False):
         for f in files:
             if ("PlanCT" in f) and not ("LungMask" in f) and "cropped" in f.lower() and not("clinic" in f.lower()) and not"Register" in f:
@@ -108,44 +107,15 @@ def FilesperPatient_Inter_LungCroped(file_path):
             if "pet" in f.lower() and "cropped" in f.lower() and not ("clinic" in f.lower()) and not"Register" in f:
                 pet_path.append(os.path.join(file_path, f))
 
-    planct_clinic = []
-    itv_clinic = []
-    planct_LM_clinic = []
-    ldct_clinic = []
-    pet_clinic = []
-    ldct_LM_clinic = []
-    keyword2="clinic"
-
-    for root, dirs, files in os.walk(file_path, topdown=False):
-        for f in files:
-            if "pet" in f.lower() and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
-                pet_clinic.append(os.path.join(file_path, f))
-            if ("PlanCT" in f) and not ("LungMask" in f) and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
-                planct_clinic.append(os.path.join(file_path, f))
-            if ("LDCT" in f) and not ("LungMask" in f) and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
-                ldct_clinic.append(os.path.join(file_path, f))
-
-            if ("planct" in f.lower()) and "LungMask" in f and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
-                planct_LM_clinic.append(os.path.join(file_path, f))
-
-            if ("LDCT" in f) and "LungMask" in f and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
-                ldct_LM_clinic.append(os.path.join(file_path, f))
-
-            if ("ITV" in f) and keyword2 in f.lower() and not("cropped" in f.lower()) and not"Register" in f:
-                itv_clinic.append(os.path.join(file_path, f))
-
-    data_dicts_intermediate = [{"PlanCT_LungCrop": planct_LungCrop_name,"ITV_LungCrop":itv_LungCrop_name,"PlanCT_LungMask_LungCrop":planCT_LM_LungCrop_name,
-                                "LDCT_LungCrop": ldct_LungCrop_name,"PET_LungCrop":pet_LungCrop_name,"LDCT_LungMask_LungCrop":LDCT_LM_LungCrop_name,
-
-                                "PlanCT_Clinic": planct_Clinic_name, "ITV_Clinic": itv_Clinic_name,"PlanCT_LungMask_Clinic": planCT_LM_Clinic_name,
-                                "LDCT_Clinic": ldct_Clinic_name, "PET_Clinic": pet_Clinic_name,"LDCT_LungMask_Clinic": LDCT_LM_Clinic_name,
-
-                                }
-                               for planct_LungCrop_name,itv_LungCrop_name,planCT_LM_LungCrop_name,ldct_LungCrop_name,pet_LungCrop_name,LDCT_LM_LungCrop_name,
-                               planct_Clinic_name,itv_Clinic_name,planCT_LM_Clinic_name,ldct_Clinic_name,pet_Clinic_name,LDCT_LM_Clinic_name in
-                               zip(planct_path,itv_path,planct_LM_path,ldct_path,pet_path,ldct_LM_path,planct_clinic,itv_clinic,planct_LM_clinic,ldct_clinic,pet_clinic,ldct_LM_clinic)
-                               ]
-
+    data_dicts_intermediate = [{"PlanCT_LungCrop": planct_LungCrop_name, "ITV_LungCrop": itv_LungCrop_name,
+                                "PlanCT_LungMask_LungCrop": planCT_LM_LungCrop_name,
+                                "LDCT_LungCrop": ldct_LungCrop_name, "PET_LungCrop": pet_LungCrop_name,
+                                "LDCT_LungMask_LungCrop": LDCT_LM_LungCrop_name}
+                               for
+                               planct_LungCrop_name, itv_LungCrop_name, planCT_LM_LungCrop_name, ldct_LungCrop_name, pet_LungCrop_name, LDCT_LM_LungCrop_name
+                               in
+                               zip(planct_path, itv_path, planct_LM_path, ldct_path, pet_path, ldct_LM_path)]
+    print("Lens:",len(planct_path), len(itv_path), len(planct_LM_path), len(ldct_path), len(pet_path), len(ldct_LM_path))
     return data_dicts_intermediate
 
 
@@ -162,5 +132,5 @@ def FilesPerPatient_Registered_dynamic(file_path,regist_v):
     data_dicts = [
         {"ldctLung_v": ldctLung_v_name,"petLung_v": petLung_v_name}
         for ldctLung_v_name, petLung_v_name, in zip(ldctLung_v,petLung_v)]
-
+    print("Files Ok:",file_path,regist_v,len(data_dicts))
     return data_dicts

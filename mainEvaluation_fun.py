@@ -10,8 +10,6 @@ from ReadAndResample_fun import OnlyRead_Intermediate
 from cropCTfromROI_lung_fun import *
 from cropCTfromROI_ClinicalInfo_fun import *
 from cropCTfromROI_BinaryPET_fun import *
-from Register_fun import *
-from Register_fun_v2 import *
 from displayRegist_fun import *
 from Resample_fun import *
 import matplotlib.pyplot as plt
@@ -57,12 +55,12 @@ def mainEval(registered_dict,intermediate_dict,pxID,save_CSVs):
 
 def mainEval_dynamic(file_path,intermediate_dict,pxID,save_CSVs):
     print("Patient with Registered Images")
-    tmp_path = save_CSVs + "Registration_metrics_v4.csv"
+    tmp_path = save_CSVs + "Registration_metrics_v5.csv"
 
     PlanCT_LungCrop_tensor, ITV_LungCrop_tensor, _, _, _, _ = OnlyRead_Intermediate(intermediate_dict, True, False)
 
     metrics_vector=[]
-    for val0 in range(11):
+    for val0 in range(12):
         val=val0+1
         registered_dict = FilesPerPatient_Registered_dynamic(file_path,val)
         ldctLung_v1_t,petLung_v1_t = OnlyRead_registered_dynamic(registered_dict,val)

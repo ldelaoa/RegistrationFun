@@ -119,4 +119,4 @@ def tailor_registration(fixed_array,moving_array,additional_array,transf_spec,ce
     movedAdditionalArray = sitk.Resample(pet_image, fixed_image, final_transform, sitk.sitkLinear, 0.0,
                                          moving_image.GetPixelID())
 
-    return moved_array,movedAdditionalArray,evaluationMetric,final_transform
+    return moved_array,sitk.GetArrayFromImage(movedAdditionalArray),evaluationMetric,final_transform

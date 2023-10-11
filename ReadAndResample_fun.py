@@ -108,6 +108,5 @@ def OnlyRead_registered_dynamic(dictionary,regist_v):
     check_ds = Dataset(data=dictionary, transform=load_transforms)
     check_loader = DataLoader(check_ds, batch_size=1, num_workers=0)
     batch_data = first(check_loader)
-
     ldctLung_v,petLung_v = (batch_data["ldctLung_v"],batch_data["petLung_v"])
     return ldctLung_v,petLung_v
