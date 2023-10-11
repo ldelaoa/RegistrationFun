@@ -62,8 +62,8 @@ def mainEval_dynamic(file_path,intermediate_dict,pxID,save_CSVs):
     PlanCT_LungCrop_tensor, ITV_LungCrop_tensor, _, _, _, _ = OnlyRead_Intermediate(intermediate_dict, True, False)
 
     metrics_vector=[]
-    for val0 in range(3):
-        val=val0+9
+    for val0 in range(11):
+        val=val0+1
         registered_dict = FilesPerPatient_Registered_dynamic(file_path,val)
         ldctLung_v1_t,petLung_v1_t = OnlyRead_registered_dynamic(registered_dict,val)
         pet_LungCrop_binary1 = BinaryPET(petLung_v1_t)

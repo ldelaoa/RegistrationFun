@@ -3,6 +3,7 @@ import os
 import csv
 import numpy as np
 from main_fun_peregrine import *
+from main_fun_peregrine_evaluation import *
 #from deleteFiles_fun import *
 
 
@@ -29,7 +30,7 @@ if __name__ == "__main__":
 	save_newRegistered = "/scratch/p308104/RegistratedNii_8versions/"
 	save_CSVs = "/home1/p308104/Registration_fun/"
 	
-	registeredPx = "/home1/p308104/Registration_fun/RegisteredPatientsv4_p1p2p3p4p5.txt"
+	registeredPx = "/home1/p308104/Registration_fun/RegisteredPatientsv4_p3.txt"
 	ids = np.loadtxt(registeredPx, dtype=int)
 	registeredPx_list = ids.tolist()
 
@@ -39,11 +40,10 @@ if __name__ == "__main__":
 	for root, _, _ in os.walk(nifti_root, topdown=False):
 		patientID = root.split("/")[-1]
 		if int(patientID) in registeredPx_list:
-		    print("Resgistered previously", patientID)
-						
-		else:
 			print("PxID: ",patientID)
-			pxok = main_peregrine(nifti_root,patientID,device_cuda,save_Intermediate,save_newRegistered,save_CSVs)
+			pxok = main_peregrine_evaluation(nifti_root,patientID,device_cuda,save_Intermediate,save_newRegistered,save_CSVs)
+		else:
+		    print("Resgistered previously", patientID)
 			
 	if False:
 		with open(save_CSVs+"ReviewOkPx_v4.csv", "a", newline="") as file_tmp:
