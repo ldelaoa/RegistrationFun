@@ -38,8 +38,8 @@ if __name__ == "__main__":
 	total_px = []
 	for root, _, _ in os.walk(nifti_root, topdown=False):
 		patientID = root.split("/")[-1]
-		if int(patientID) in registeredPx_list:
-		    print("Resgistered previously", patientID)
+		if False:#int(patientID) in registeredPx_list:
+			print("Resgistered previously", patientID)
 						
 		else:
 			print("PxID: ",patientID)

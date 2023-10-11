@@ -22,8 +22,6 @@ from ReadAndResample_fun import *
 from cropCTfromROI_lung_fun import *
 from cropCTfromROI_ClinicalInfo_fun import *
 from cropCTfromROI_BinaryPET_fun import *
-from Register_fun import *
-from Register_fun_v2 import *
 from displayRegist_fun import *
 from Resample_fun import *
 import matplotlib.pyplot as plt
